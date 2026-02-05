@@ -1,153 +1,130 @@
 "use client";
-import React, { useState, useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
 
-// Sample product data
-const products = {
-  bestSellers: [
-    {
-      id: 1,
-      image: '/images/delete/products/Product35.png',
-      tag: "NEW",
-      name: "Wi-fi speaker lamp",
-      price: "$65.00",
-    },
-    {
-      id: 2,
-      image: '/images/delete/products/Product36.png',
-      tag: null,
-      name: "Wall clock gray pink",
-      price: "$85.00",
-    }, 
-    {
-      id: 3,
-      image: '/images/delete/products/Product73.png',
-      tag: "SALE",
-      name: "Nordrana basket",
-      price: "$65.00",
-      oldPrice: "$95.00",
-    },
-    {
-      id: 4,
-      image:'/images/delete/products/Product92.png',
-      tag: null,
-      name: "Sockeraert vase black",
-      price: "$65.00",
-    },
-    {
-      id: 5,
-      image: '/images/delete/products/Product95.png',
-      tag: null,
-      name: "Palm leaf handmade",
-      price: "$65.00",
-    },
-    {
-      id: 6,
-      image: '/images/delete/products/Product97.png',
-      tag: "SALE",
-      name: "Earth globe black",
-      price: "$55.00",
-      oldPrice: "$65.00",
-    },
-    {
-      id: 7,
-      image: '/images/delete/products/Product3.png',
-      tag: null,
-      name: "Fejka artificial plant",
-      price: "$65.00",
-    },
-    {
-      id: 8,
-      image: '/images/delete/products/Product24.png',
-      tag: "NEW",
-      name: "Vardande plant pot",
-      price: "$27.00",
-    },
-  ],
-  newArrivals: [
-    {
-      id: 9,
-      image: '/images/delete/products/Product27.png',
-      tag: "NEW",
-      name: "New Product 1",
-      price: "$45.00",
-    },
-    {
-      id: 10,
-      image: '/images/delete/products/Product 49 (1).png',
-      tag: null,
-      name: "New Product 2",
-      price: "$75.00",
-    },
-    {
-      id: 11,
-      image:'/images/delete/products/Product 80 (1).png',
-      tag: "SALE",
-      name: "New Product 3",
-      price: "$35.00",
-      oldPrice: "$50.00",
-    },
-    {
-      id: 12,
-      image: '/images/delete/products/Product 93 (2).png',
-      tag: "NEW",
-      name: "New Product 4",
-      price: "$99.00",
-    },
-  ],
+import React, { useState, useRef, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight, Star, Award, Sparkles, Loader2, MessageCircle, Mail } from "lucide-react";
+import { productsAPI, Product } from "@/lib/api";
+
+const WHATSAPP_NUMBER = '+919529626262';
+const EMAIL_ADDRESS = 'orders@thecrosswild.com';
+
+const getWhatsAppLink = (product: Product) => {
+  const message = encodeURIComponent(
+    `Hi! I'm interested in:\n\n*${product.name}*\nCategory: ${product.category}\n\nPlease share pricing and availability.`
+  );
+  return `https://wa.me/${WHATSAPP_NUMBER.replace(/[^0-9]/g, '')}?text=${message}`;
+};
+
+const getEmailLink = (product: Product) => {
+  const subject = encodeURIComponent(`Inquiry: ${product.name}`);
+  const body = encodeURIComponent(
+    `Hi,\n\nI'm interested in "${product.name}".\n\nPlease share pricing and availability details.\n\nThank you!`
+  );
+  return `mailto:${EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
 };
 
 // Tab Button Component
-const TabButton = ({ isActive, label, onClick }) => (
+const TabButton = ({ isActive, label, icon: Icon, onClick }: { isActive: boolean; label: string; icon: any; onClick: () => void }) => (
   <button
-    className={`pb-2 mx-4 text-xl font-semibold transition-colors duration-200 ${
+    className={`flex items-center gap-2 pb-3 px-6 text-lg md:text-xl font-bold transition-all duration-300 border-b-4 ${
       isActive
-        ? "text-black border-b-2 border-black"
-        : "text-gray-500 hover:text-gray-700"
+        ? "text-primary border-primary"
+        : "text-gray-500 border-transparent hover:text-gray-700 hover:border-gray-300"
     }`}
     onClick={onClick}
   >
+    <Icon className="w-5 h-5" />
     {label}
   </button>
 );
 
 // Product Card Component
-const ProductCard = ({ product }) => (
-  <div className="flex-none w-64 sm:w-72 md:w-80 lg:w-72 xl:w-80 2xl:w-96 p-3 relative group">
-    <div className="bg-gray-100 p-5 rounded-xl relative overflow-hidden transition-all duration-300 group-hover:shadow-lg">
-      {product.tag && (
-        <span
-          className={`absolute top-3 left-3 text-xs font-medium px-3 py-1.5 rounded-full z-10 ${
-            product.tag === "NEW"
-              ? "bg-green-100 text-green-700"
-              : "bg-red-100 text-red-700"
-          }`}
-        >
-          {product.tag}
-        </span>
-      )}
-   <div className="relative h-60 md:h-72 lg:h-64 xl:h-72 2xl:h-80 overflow-hidden rounded-lg">
-  <Image
-    src={product.image}
-    alt={product.name}
-    fill
-    className="object-contain transition-transform duration-500 group-hover:scale-105"
-    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-  />
-</div>
-    </div>
-    <div className="mt-4 text-center">
-      <h3 className="text-lg md:text-xl font-semibold text-gray-800 line-clamp-1">
-        {product.name}
-      </h3>
-      <div className="mt-2 text-lg md:text-xl">
-        <span className="font-bold text-black">{product.price}</span>
-        {product.oldPrice && (
-          <span className="ml-3 text-gray-400 line-through text-base">
-            {product.oldPrice}
-          </span>
+const ProductCard = ({ product }: { product: Product }) => (
+  <div className="flex-none w-72 md:w-80 lg:w-72 xl:w-80 p-3">
+    <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+      {/* Image Container */}
+      <Link href={`/products/${product.id}`} className="block relative h-72 bg-gray-50 dark:bg-gray-700 overflow-hidden">
+        {product.image && (
+          <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            className="object-cover group-hover:scale-110 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         )}
+
+        {/* Badges */}
+        <div className="absolute top-3 left-3 flex flex-col gap-2 z-10">
+          {product.bestSeller && (
+            <span className="bg-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+              <Award className="w-3 h-3" />
+              Best Seller
+            </span>
+          )}
+          {product.newArrival && (
+            <span className="bg-green-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1">
+              <Sparkles className="w-3 h-3" />
+              New
+            </span>
+          )}
+          {product.featured && (
+            <span className="bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+              Featured
+            </span>
+          )}
+        </div>
+
+        {/* Quick View Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      </Link>
+
+      {/* Product Info */}
+      <div className="p-5">
+        <Link href={`/products/${product.id}`}>
+          <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-primary transition-colors min-h-[3.5rem]">
+            {product.title || product.name}
+          </h3>
+        </Link>
+
+        {/* Rating */}
+        {product.rating > 0 && (
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+              <span className="text-sm font-semibold">{product.rating}</span>
+            </div>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              ({product.reviews} reviews)
+            </span>
+          </div>
+        )}
+
+        {/* CTA Buttons - WhatsApp, Email, View */}
+        <div className="flex gap-2">
+          <a
+            href={getWhatsAppLink(product)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold rounded-xl transition-colors"
+          >
+            <MessageCircle className="w-4 h-4" />
+            WhatsApp
+          </a>
+          <a
+            href={getEmailLink(product)}
+            className="flex items-center justify-center px-3 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
+          >
+            <Mail className="w-4 h-4" />
+          </a>
+          <Link
+            href={`/products/${product.id}`}
+            className="flex items-center justify-center px-3 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
     </div>
   </div>
@@ -156,12 +133,35 @@ const ProductCard = ({ product }) => (
 // Main Component
 const BestSellersAndNewArrivals = () => {
   const [activeTab, setActiveTab] = useState("bestSellers");
-  const scrollContainerRef = useRef(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [bestSellers, setBestSellers] = useState<Product[]>([]);
+  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const scroll = (direction) => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const [bestSellerRes, newArrivalRes] = await Promise.all([
+          productsAPI.getAll({ bestSeller: true, limit: 8 }),
+          productsAPI.getAll({ newArrival: true, limit: 8 }),
+        ]);
+        setBestSellers(bestSellerRes.products);
+        setNewArrivals(newArrivalRes.products);
+      } catch (err) {
+        console.error('Failed to fetch products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const currentProducts = activeTab === "bestSellers" ? bestSellers : newArrivals;
+
+  const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const { current } = scrollContainerRef;
-      const scrollAmount = 400; // Fixed scroll amount
+      const scrollAmount = 350;
       if (direction === "left") {
         current.scrollLeft -= scrollAmount;
       } else {
@@ -170,66 +170,100 @@ const BestSellersAndNewArrivals = () => {
     }
   };
 
-  const currentProducts = products[activeTab];
+  if (loading) {
+    return (
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <div className="flex justify-center items-center py-20">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </section>
+    );
+  }
+
+  if (bestSellers.length === 0 && newArrivals.length === 0) return null;
 
   return (
-    <div className="font-sans max-w-7xl mx-auto px-4 py-12">
-      {/* Tab Buttons */}
-      <div className="flex justify-center mb-10">
-        <TabButton
-          isActive={activeTab === "bestSellers"}
-          label="Best sellers"
-          onClick={() => setActiveTab("bestSellers")}
-        />
-        <TabButton
-          isActive={activeTab === "newArrivals"}
-          label="New arrivals"
-          onClick={() => setActiveTab("newArrivals")}
-        />
-      </div>
-
-      <div className="relative">
-        {/* Desktop Grid Layout */}
-        <div className="hidden lg:grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-          {currentProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="w-full px-6 lg:px-12">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            Featured Collections
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Discover our curated selection of top-selling and newest products
+          </p>
         </div>
 
-        {/* Mobile / Tablet Carousel */}
-        <div className="relative lg:hidden">
+        {/* Tab Buttons */}
+        <div className="flex justify-center gap-8 mb-10 border-b-2 border-gray-200 dark:border-gray-700">
+          <TabButton
+            isActive={activeTab === "bestSellers"}
+            label="Best Sellers"
+            icon={Award}
+            onClick={() => setActiveTab("bestSellers")}
+          />
+          <TabButton
+            isActive={activeTab === "newArrivals"}
+            label="New Arrivals"
+            icon={Sparkles}
+            onClick={() => setActiveTab("newArrivals")}
+          />
+        </div>
+
+        {/* Products Container */}
+        <div className="relative">
+          {/* Scrollable Container */}
           <div
             ref={scrollContainerRef}
-            className="flex overflow-x-auto scroll-smooth scrollbar-hide space-x-4 py-2 px-2"
-            style={{ scrollBehavior: "smooth" }}
+            className="flex overflow-x-auto scroll-smooth scrollbar-hide gap-2 py-4"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {currentProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard
+                key={product.id}
+                product={product}
+              />
             ))}
           </div>
 
           {/* Navigation Arrows */}
-          {currentProducts.length > 1 && (
+          {currentProducts.length > 3 && (
             <>
               <button
                 onClick={() => scroll("left")}
-                className="absolute left-0 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg z-10 hover:bg-gray-50 transition-colors"
+                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-700"
                 aria-label="Scroll left"
               >
-                <ChevronLeft size={28} />
+                <ChevronLeft size={24} className="text-gray-800 dark:text-white" />
               </button>
               <button
                 onClick={() => scroll("right")}
-                className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg z-10 hover:bg-gray-50 transition-colors"
+                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-700"
                 aria-label="Scroll right"
               >
-                <ChevronRight size={28} />
+                <ChevronRight size={24} className="text-gray-800 dark:text-white" />
               </button>
             </>
           )}
+
+          {/* Gradient Overlays */}
+          <div className="hidden md:block absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-900 pointer-events-none z-10"></div>
+          <div className="hidden md:block absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-900 pointer-events-none z-10"></div>
+        </div>
+
+        {/* View All Link */}
+        <div className="text-center mt-8">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-white font-semibold rounded-lg hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl"
+          >
+            <span>View All Products</span>
+            <ChevronRight className="w-5 h-5" />
+          </Link>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

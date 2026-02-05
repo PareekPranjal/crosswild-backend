@@ -1,14 +1,15 @@
 "use client";
 
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Headerr from "@/components/Headerr/Header";
+import VistaprintHeader from "@/components/Header/VistaprintHeader";
+import VistaprintFooter from "@/components/Footer/VistaprintFooter";
 import ScrollToTop from "@/components/ScrollToTop";
-import WhatsAppButton from "@/components/WhatsAppButton/whatsAppBotton";  
-import CallButton from "@/components/CallButton/callButton";   
+import WhatsAppButton from "@/components/WhatsAppButton/whatsAppBotton";
+import CallButton from "@/components/CallButton/callButton";
+import SEOHead from "@/components/SEO/SEOHead";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 import { Providers } from "./providers";
+import { CartProvider } from "@/contexts/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,16 +20,24 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
-      <body className={`bg-[#FCFCFC] dark:bg-black ${inter.className}`}>
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="theme-color" content="#2563EB" />
+      </head>
+      <body className={`bg-white dark:bg-black ${inter.className}`}>
         <Providers>
-          {/* <Header /> */}
-          <Headerr />
-          {children}
-          <Footer />
-          <ScrollToTop />
-          <WhatsAppButton />  
-          <CallButton />    
+          <CartProvider>
+            <SEOHead />
+            <VistaprintHeader />
+            {children}
+            <VistaprintFooter />
+            <ScrollToTop />
+            <WhatsAppButton />
+            <CallButton />
+          </CartProvider>
         </Providers>
       </body>
     </html>

@@ -1,0 +1,294 @@
+import { Metadata } from 'next';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
+
+// Default SEO values (fallback if API fails)
+const defaultSEO = {
+  siteName: 'The CrossWild',
+  siteUrl: 'https://thecrosswild.com',
+  defaultTitle: 'The CrossWild - Custom Printing & Promotional Merchandise',
+  titleTemplate: '%s | The CrossWild',
+  defaultDescription: 'Premium custom printing services for T-shirts, caps, bags, mugs, and promotional merchandise. Quality printing with fast delivery across India.',
+  defaultKeywords: ['custom printing', 'promotional merchandise', 't-shirt printing', 'corporate gifts'],
+  defaultOgImage: '/images/og-default.jpg',
+};
+
+// Fetch global SEO settings from API
+export async function getGlobalSEO() {
+  try {
+    const response = await fetch(`${API_URL}/seo/global`, {
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
+    });
+    if (!response.ok) return defaultSEO;
+    const data = await response.json();
+    return data.settings || defaultSEO;
+  } catch (error) {
+    console.error('Failed to fetch global SEO:', error);
+    return defaultSEO;
+  }
+}
+
+// Fetch page-specific SEO from API
+export async function getPageSEO(path: string) {
+  try {
+    const response = await fetch(`${API_URL}/seo/pages/${encodeURIComponent(path)}`, {
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    return data.page;
+  } catch (error) {
+    console.error('Failed to fetch page SEO:', error);
+    return null;
+  }
+}
+
+// Generate metadata for a page
+export async function generatePageMetadata(
+  path: string,
+  customData?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+    image?: string;
+    noIndex?: boolean;
+  }
+): Promise<Metadata> {
+  const globalSEO = await getGlobalSEO();
+  const pageSEO = await getPageSEO(path);
+
+  // Merge: custom data > page SEO > global defaults
+  const title = customData?.title || pageSEO?.title || globalSEO.defaultTitle;
+  const description = customData?.description || pageSEO?.description || globalSEO.defaultDescription;
+  const keywords = customData?.keywords || pageSEO?.keywords || globalSEO.defaultKeywords || [];
+  const ogImage = customData?.image || pageSEO?.ogImage || globalSEO.defaultOgImage;
+  const noIndex = customData?.noIndex || pageSEO?.noIndex || false;
+
+  const siteUrl = globalSEO.siteUrl || defaultSEO.siteUrl;
+
+  return {
+    title: {
+      default: title,
+      template: globalSEO.titleTemplate || defaultSEO.titleTemplate,
+    },
+    description,
+    keywords: keywords.join(', '),
+    authors: [{ name: globalSEO.siteName || defaultSEO.siteName }],
+    creator: globalSEO.siteName || defaultSEO.siteName,
+    publisher: globalSEO.siteName || defaultSEO.siteName,
+    metadataBase: new URL(siteUrl),
+    alternates: {
+      canonical: pageSEO?.canonicalUrl || `${siteUrl}${path}`,
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      url: `${siteUrl}${path}`,
+      siteName: globalSEO.siteName || defaultSEO.siteName,
+      title: pageSEO?.ogTitle || title,
+      description: pageSEO?.ogDescription || description,
+      images: ogImage ? [
+        {
+          url: ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageSEO?.ogTitle || title,
+      description: pageSEO?.ogDescription || description,
+      images: ogImage ? [ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`] : undefined,
+    },
+    robots: {
+      index: !noIndex,
+      follow: !pageSEO?.noFollow,
+      googleBot: {
+        index: !noIndex,
+        follow: !pageSEO?.noFollow,
+      },
+    },
+    verification: {
+      google: globalSEO.googleSiteVerification,
+    },
+  };
+}
+
+// Generate product metadata
+export async function generateProductMetadata(product: {
+  id: string;
+  name: string;
+  description: string;
+  image?: string;
+  category?: string;
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+    ogImage?: string;
+  };
+}): Promise<Metadata> {
+  const globalSEO = await getGlobalSEO();
+  const siteUrl = globalSEO.siteUrl || defaultSEO.siteUrl;
+
+  const title = product.seo?.title || product.name;
+  const description = product.seo?.description || product.description.substring(0, 160);
+  const image = product.seo?.ogImage || product.image;
+  const keywords = product.seo?.keywords || [product.name, product.category, 'custom printing'].filter(Boolean);
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    openGraph: {
+      type: 'website',
+      url: `${siteUrl}/products/${product.id}`,
+      siteName: globalSEO.siteName || defaultSEO.siteName,
+      title,
+      description,
+      images: image ? [
+        {
+          url: image.startsWith('http') ? image : `${siteUrl}${image}`,
+          width: 1200,
+          height: 630,
+          alt: product.name,
+        },
+      ] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: image ? [image.startsWith('http') ? image : `${siteUrl}${image}`] : undefined,
+    },
+  };
+}
+
+// Generate blog metadata
+export async function generateBlogMetadata(blog: {
+  id: string;
+  title: string;
+  paragraph: string;
+  image?: string;
+  author?: { name: string };
+  tags?: string[];
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string[];
+    ogImage?: string;
+  };
+}): Promise<Metadata> {
+  const globalSEO = await getGlobalSEO();
+  const siteUrl = globalSEO.siteUrl || defaultSEO.siteUrl;
+
+  const title = blog.seo?.title || blog.title;
+  const description = blog.seo?.description || blog.paragraph.substring(0, 160);
+  const image = blog.seo?.ogImage || blog.image;
+  const keywords = blog.seo?.keywords || blog.tags || [];
+
+  return {
+    title,
+    description,
+    keywords: keywords.join(', '),
+    authors: blog.author ? [{ name: blog.author.name }] : undefined,
+    openGraph: {
+      type: 'article',
+      url: `${siteUrl}/blog/${blog.id}`,
+      siteName: globalSEO.siteName || defaultSEO.siteName,
+      title,
+      description,
+      images: image ? [
+        {
+          url: image.startsWith('http') ? image : `${siteUrl}${image}`,
+          width: 1200,
+          height: 630,
+          alt: blog.title,
+        },
+      ] : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: image ? [image.startsWith('http') ? image : `${siteUrl}${image}`] : undefined,
+    },
+  };
+}
+
+// Generate JSON-LD structured data
+export function generateOrganizationSchema(globalSEO: any) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': globalSEO.organizationSchema?.type || 'Organization',
+    name: globalSEO.organizationSchema?.name || globalSEO.siteName,
+    url: globalSEO.siteUrl,
+    logo: globalSEO.organizationSchema?.logo,
+    description: globalSEO.organizationSchema?.description || globalSEO.defaultDescription,
+    contactPoint: globalSEO.contactInfo ? {
+      '@type': 'ContactPoint',
+      telephone: globalSEO.contactInfo.phone,
+      email: globalSEO.contactInfo.email,
+      contactType: 'customer service',
+    } : undefined,
+    address: globalSEO.contactInfo?.address ? {
+      '@type': 'PostalAddress',
+      streetAddress: globalSEO.contactInfo.address.street,
+      addressLocality: globalSEO.contactInfo.address.city,
+      addressRegion: globalSEO.contactInfo.address.state,
+      postalCode: globalSEO.contactInfo.address.postalCode,
+      addressCountry: globalSEO.contactInfo.address.country,
+    } : undefined,
+    sameAs: [
+      globalSEO.socialLinks?.facebook,
+      globalSEO.socialLinks?.twitter,
+      globalSEO.socialLinks?.instagram,
+      globalSEO.socialLinks?.linkedin,
+      globalSEO.socialLinks?.youtube,
+    ].filter(Boolean),
+  };
+}
+
+export function generateProductSchema(product: any, siteUrl: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: product.image,
+    url: `${siteUrl}/products/${product.id}`,
+    brand: {
+      '@type': 'Brand',
+      name: 'The CrossWild',
+    },
+    offers: {
+      '@type': 'Offer',
+      availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+      priceCurrency: 'INR',
+      price: product.price || 0,
+    },
+  };
+}
+
+export function generateBlogSchema(blog: any, siteUrl: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: blog.title,
+    description: blog.paragraph?.substring(0, 160),
+    image: blog.image,
+    url: `${siteUrl}/blog/${blog.id}`,
+    author: {
+      '@type': 'Person',
+      name: blog.author?.name || 'The CrossWild',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'The CrossWild',
+    },
+    datePublished: blog.createdAt,
+    dateModified: blog.updatedAt,
+  };
+}

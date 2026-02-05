@@ -16,7 +16,7 @@ const Gallery = () => {
 
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
+      <div className="w-full px-6 lg:px-12">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
             Our Gallery

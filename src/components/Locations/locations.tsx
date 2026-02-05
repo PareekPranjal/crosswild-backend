@@ -19,6 +19,10 @@ const OfficeLocations = () => {
       gradient: 'from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
       text: 'text-purple-500',
     },
+    rose: {
+      gradient: 'from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700',
+      text: 'text-rose-500',
+    },
   };
 
   const offices = [
@@ -62,6 +66,16 @@ const OfficeLocations = () => {
       mapLink: 'https://maps.google.com/?q=45, Moti Magri Scheme, Zinc Park, Udaipur',
       phone: '+91 9876501234',
     },
+    {
+      city: 'Ajmer',
+      address: 'A-21, Vaishali Nagar, Near Civil Lines',
+      landmark: 'Civil Lines Area',
+      state: 'Rajasthan 305001',
+      iconColor: 'bg-rose-500',
+      colorName: 'rose',
+      mapLink: 'https://maps.google.com/?q=A-21, Vaishali Nagar, Near Civil Lines, Ajmer',
+      phone: '+91 9876543220',
+    },
   ];
 
   return (
@@ -81,7 +95,7 @@ const OfficeLocations = () => {
         </div>
 
         {/* Office Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
           {offices.map((office, index) => {
             const colors = colorMap[office.colorName];
             return (

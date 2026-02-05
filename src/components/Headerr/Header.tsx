@@ -832,19 +832,24 @@
 // }
 
 import React, { useState, useEffect, useRef } from "react";
-import Link from "next/link"; // **1. Import the Next.js Link component**
+import Link from "next/link";
 import {
   FaRegQuestionCircle,
   FaListUl,
   FaRegNewspaper,
   FaImage,
 } from "react-icons/fa";
+import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
+import { useCart } from "@/contexts/CartContext";
+import CartDrawer from "@/components/Cart/CartDrawer";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { getTotalItems } = useCart();
 
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
@@ -1176,26 +1181,18 @@ export default function App() {
               Contact
             </Link>
           </div>
-          {/* <Link
-            href="/cart" // Changed from href="#"
-            className="flex items-center text-gray-600 transition-colors hover:text-gray-900"
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="flex items-center text-gray-600 transition-colors hover:text-gray-900 relative"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 3h18l-1 16H4L3 3zM1 3h22"
-              />
-            </svg>
+            <ShoppingCart className="h-6 w-6" />
+            {getTotalItems() > 0 && (
+              <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {getTotalItems()}
+              </span>
+            )}
             <span className="ml-1 hidden lg:block">Cart</span>
-          </Link> */}
+          </button>
         </div>
       </div>
 
@@ -1440,6 +1437,9 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Cart Drawer */}
+      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </nav>
   );
 }

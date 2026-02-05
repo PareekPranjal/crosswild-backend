@@ -89,7 +89,7 @@ export default function ProcessDetailsPage() {
 
       {/* Hero */}
       <section className="px-6 md:px-10 lg:px-16">
-        <div className="max-w-7xl mx-auto py-14 md:py-20">
+        <div className="w-full py-14 md:py-20">
           <div className="text-center md:text-left">
         
             <h1 className="mt-4 text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
@@ -119,7 +119,7 @@ export default function ProcessDetailsPage() {
 
       {/* Steps */}
       <section className="px-6 md:px-10 lg:px-16 pb-16 md:pb-24">
-        <div className="max-w-7xl mx-auto space-y-12 md:space-y-16">
+        <div className="w-full space-y-12 md:space-y-16">
           {steps.map((step, idx) => {
             const Icon = step.icon;
             const isEven = idx % 2 === 1;
@@ -192,7 +192,7 @@ export default function ProcessDetailsPage() {
 
       {/* CTA Footer */}
       <section className="px-6 md:px-10 lg:px-16 pb-20">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="rounded-2xl bg-white/70 backdrop-blur ring-1 ring-indigo-100 shadow-sm p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h3 className="text-xl md:text-2xl font-semibold text-gray-900">

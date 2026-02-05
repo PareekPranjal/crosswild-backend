@@ -7,6 +7,18 @@ const nextConfig = {
         hostname: "cdn.sanity.io",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ibb.co",
+      },
+      {
+        protocol: "https",
+        hostname: "**.ibb.co",
+      },
     ],
   },
   eslint: {

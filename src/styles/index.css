@@ -5,6 +5,75 @@ layer(base);
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   CENTRALIZED COLOR CONFIGURATION
+   Change these values to update the entire website color scheme
+   ============================================ */
+
+:root {
+  /* Primary Color - Blue (Trust & Security) */
+  --brand-primary: #2563EB;          /* Modern Blue - Main brand color */
+  --brand-primary-dark: #1E40AF;     /* Deep Blue - Hover states */
+  --brand-primary-light: #3B82F6;    /* Light Blue - Subtle highlights */
+  --brand-primary-50: #EFF6FF;       /* Very light blue background */
+  --brand-primary-100: #DBEAFE;
+  --brand-primary-200: #BFDBFE;
+  --brand-primary-300: #93C5FD;
+  --brand-primary-400: #60A5FA;
+  --brand-primary-500: #3B82F6;
+  --brand-primary-600: #2563EB;
+  --brand-primary-700: #1D4ED8;
+  --brand-primary-800: #1E40AF;
+  --brand-primary-900: #1E3A8A;
+
+  /* Secondary Color - Orange (Call to Action) */
+  --brand-secondary: #F97316;        /* Orange - CTA buttons */
+  --brand-secondary-dark: #EA580C;   /* Dark Orange - Hover states */
+  --brand-secondary-light: #FB923C;  /* Light Orange - Highlights */
+  --brand-secondary-50: #FFF7ED;
+  --brand-secondary-100: #FFEDD5;
+  --brand-secondary-200: #FED7AA;
+  --brand-secondary-300: #FDBA74;
+  --brand-secondary-400: #FB923C;
+  --brand-secondary-500: #F97316;
+  --brand-secondary-600: #EA580C;
+  --brand-secondary-700: #C2410C;
+  --brand-secondary-800: #9A3412;
+  --brand-secondary-900: #7C2D12;
+
+  /* Accent Color - Green (Success states) */
+  --brand-accent: #10B981;           /* Green - Success, confirmed */
+  --brand-accent-dark: #059669;
+  --brand-accent-light: #34D399;
+
+  /* Neutral Colors */
+  --brand-bg-primary: #FFFFFF;       /* Main background */
+  --brand-bg-secondary: #F9FAFB;     /* Secondary background */
+  --brand-bg-tertiary: #F3F4F6;      /* Cards, sections */
+  --brand-text-primary: #111827;     /* Main text */
+  --brand-text-secondary: #1F2937;   /* Secondary text */
+  --brand-text-muted: #6B7280;       /* Muted text */
+  --brand-border: #E5E7EB;           /* Borders */
+  --brand-border-dark: #D1D5DB;      /* Darker borders */
+
+  /* Warning & Error */
+  --brand-warning: #F59E0B;
+  --brand-error: #EF4444;
+  --brand-error-dark: #DC2626;
+}
+
+/* Dark mode overrides (optional) */
+.dark {
+  --brand-bg-primary: #121723;
+  --brand-bg-secondary: #171c28;
+  --brand-bg-tertiary: #1d2430;
+  --brand-text-primary: #F9FAFB;
+  --brand-text-secondary: #E5E7EB;
+  --brand-text-muted: #9CA3AF;
+  --brand-border: #374151;
+  --brand-border-dark: #4B5563;
+}
+
 @theme {
   --breakpoint-*: initial;
   --breakpoint-xs: 450px;
@@ -19,16 +88,53 @@ layer(base);
   --color-white: #ffffff;
   --color-black: #121723;
   --color-dark: #1d2430;
-  --color-primary: #4a6cf7;
+
+  /* Primary colors mapped from CSS variables */
+  --color-primary: var(--brand-primary);
+  --color-primary-dark: var(--brand-primary-dark);
+  --color-primary-light: var(--brand-primary-light);
+  --color-primary-50: var(--brand-primary-50);
+  --color-primary-100: var(--brand-primary-100);
+  --color-primary-200: var(--brand-primary-200);
+  --color-primary-300: var(--brand-primary-300);
+  --color-primary-400: var(--brand-primary-400);
+  --color-primary-500: var(--brand-primary-500);
+  --color-primary-600: var(--brand-primary-600);
+  --color-primary-700: var(--brand-primary-700);
+  --color-primary-800: var(--brand-primary-800);
+  --color-primary-900: var(--brand-primary-900);
+
+  /* Secondary colors (Orange - CTA) */
+  --color-secondary: var(--brand-secondary);
+  --color-secondary-dark: var(--brand-secondary-dark);
+  --color-secondary-light: var(--brand-secondary-light);
+  --color-secondary-50: var(--brand-secondary-50);
+  --color-secondary-100: var(--brand-secondary-100);
+  --color-secondary-200: var(--brand-secondary-200);
+  --color-secondary-300: var(--brand-secondary-300);
+  --color-secondary-400: var(--brand-secondary-400);
+  --color-secondary-500: var(--brand-secondary-500);
+  --color-secondary-600: var(--brand-secondary-600);
+  --color-secondary-700: var(--brand-secondary-700);
+  --color-secondary-800: var(--brand-secondary-800);
+  --color-secondary-900: var(--brand-secondary-900);
+
+  /* Accent colors (Green - Success) */
+  --color-accent: var(--brand-accent);
+  --color-accent-dark: var(--brand-accent-dark);
+  --color-accent-light: var(--brand-accent-light);
+
+  /* Legacy color support */
   --color-yellow: #fbb040;
   --color-bg-color-dark: #171c28;
 
-  --color-body-color: #788293;
+  --color-body-color: var(--brand-text-muted);
   --color-body-color-dark: #959cb1;
 
-  --color-stroke-stroke: #e3e8ef;
+  --color-stroke-stroke: var(--brand-border);
   --color-stroke-dark: #353943;
 
+  /* Gray scale */
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -43,13 +149,19 @@ layer(base);
   --color-gray-dark: #1e232e;
   --color-gray-light: #f0f2f9;
 
+  /* Warning & Error */
+  --color-warning: var(--brand-warning);
+  --color-error: var(--brand-error);
+  --color-error-dark: var(--brand-error-dark);
+  --color-success: var(--brand-accent);
+
   --shadow-sign-up: 0px 5px 10px rgba(4, 10, 34, 0.2);
   --shadow-one: 0px 2px 3px rgba(7, 7, 77, 0.05);
   --shadow-two: 0px 5px 10px rgba(6, 8, 15, 0.1);
   --shadow-three: 0px 5px 15px rgba(6, 8, 15, 0.05);
   --shadow-sticky: inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
   --shadow-sticky-dark: inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
-  --shadow-feature-2: 0px 10px 40px rgba(48, 86, 211, 0.12);
+  --shadow-feature-2: 0px 10px 40px rgba(37, 99, 235, 0.12);
   --shadow-submit: 0px 5px 20px rgba(4, 10, 34, 0.1);
   --shadow-submit-dark: 0px 5px 20px rgba(4, 10, 34, 0.1);
   --shadow-btn: 0px 1px 2px rgba(4, 10, 34, 0.15);
@@ -132,4 +244,22 @@ layer(base);
   input[type="checkbox"]:checked ~ label span svg {
     @apply inline-flex;
   }
+}
+
+/* Infinite Scrolling Marquee Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.pause-animation:hover {
+  animation-play-state: paused;
 }

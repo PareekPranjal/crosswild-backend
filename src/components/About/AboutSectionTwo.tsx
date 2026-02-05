@@ -129,7 +129,7 @@ const AboutSectionTwo = () => {
       </div>
     </section>
       <section className="bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="w-full px-6 lg:px-12">
         {/* Heading */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Why Choose Us?</h2>
