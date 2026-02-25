@@ -11,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class" enableSystem={false} defaultTheme="light">
+        <ThemeProvider attribute="class" enableSystem={false} defaultTheme="dark">
           {children}
         </ThemeProvider>
         {process.env.NODE_ENV === "development" && (
