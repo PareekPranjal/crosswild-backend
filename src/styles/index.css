@@ -7,30 +7,38 @@ layer(base);
 
 /* ============================================
    CENTRALIZED COLOR CONFIGURATION
-   Light: Warm Amber · Pure White · Light Gray
-   Dark:  Warm Cream / Espresso theme
+   Light: Clean neutral whites
+   Dark:  Premium Dark eCommerce Theme
+          Eye-friendly · High-conversion · Modern
    ============================================ */
 
 :root {
-  /* PRIMARY: Warm Amber/Orange (Brand Accent & CTA) */
-  --brand-primary: #F5A623;          /* Warm Amber - Main brand color */
-  --brand-primary-dark: #E69500;     /* Deep Amber - Hover states */
-  --brand-primary-light: #FFBB4D;    /* Light Amber - Highlights */
-  --brand-primary-50: #FFFBF0;       /* Whisper amber */
-  --brand-primary-100: #FFF3D0;
-  --brand-primary-200: #FFE5A0;
-  --brand-primary-300: #FFD06B;
-  --brand-primary-400: #FFBA40;
-  --brand-primary-500: #F5A623;
-  --brand-primary-600: #E69500;
-  --brand-primary-700: #C97800;
-  --brand-primary-800: #A56000;
-  --brand-primary-900: #7A4800;
+  /* ── PRIMARY BRAND: Orange (Buy Now CTAs) ── */
+  --brand-primary: #F97316;
+  --brand-primary-dark: #EA580C;        /* backward-compat alias */
+  --brand-primary-hover: #EA580C;
+  --brand-primary-active: #C2410C;
+  --brand-primary-light: #FDBA74;
+  --brand-primary-50: #FFF7ED;
+  --brand-primary-100: #FFEDD5;
+  --brand-primary-200: #FED7AA;
+  --brand-primary-300: #FDBA74;
+  --brand-primary-400: #FB923C;
+  --brand-primary-500: #F97316;
+  --brand-primary-600: #EA580C;
+  --brand-primary-700: #C2410C;
+  --brand-primary-800: #9A3412;
+  --brand-primary-900: #7C2D12;
 
-  /* SECONDARY: Near Black (Headings & Strong Elements) */
-  --brand-secondary: #111111;        /* Near Black - Headings */
-  --brand-secondary-dark: #000000;   /* Pure Black */
-  --brand-secondary-light: #333333;  /* Dark Gray */
+  /* ── SECONDARY BRAND: Blue (Add to Cart, links, trust) ── */
+  --brand-secondary-blue: #3B82F6;
+  --brand-secondary-blue-hover: #2563EB;
+  --brand-secondary-blue-active: #1D4ED8;
+
+  /* ── NEAR-BLACK SCALE (legacy secondary) ── */
+  --brand-secondary: #111111;
+  --brand-secondary-dark: #000000;
+  --brand-secondary-light: #333333;
   --brand-secondary-50: #F5F5F5;
   --brand-secondary-100: #EBEBEB;
   --brand-secondary-200: #D6D6D6;
@@ -42,37 +50,144 @@ layer(base);
   --brand-secondary-800: #111111;
   --brand-secondary-900: #080808;
 
-  /* ACCENT: Emerald Green (Success states) */
-  --brand-accent: #10B981;           /* Emerald - Success, confirmed */
-  --brand-accent-dark: #059669;
-  --brand-accent-light: #34D399;
+  /* ── BACKGROUNDS (Light Mode) ── */
+  --brand-bg-primary: #FFFFFF;
+  --brand-bg-secondary: #F7F7F7;
+  --brand-bg-section: #F3F4F6;
+  --brand-bg-card: #FFFFFF;
+  --brand-bg-card-elevated: #FAFAFA;
+  --brand-bg-tertiary: #FFFFFF;        /* compat alias */
 
-  /* NEUTRAL: Pure White & Soft Gray */
-  --brand-bg-primary: #FFFFFF;       /* Pure White - Main background */
-  --brand-bg-secondary: #F7F7F7;     /* Soft Gray - Sections */
-  --brand-bg-tertiary: #FFFFFF;      /* Card Background */
-  --brand-text-primary: #222222;     /* Main text */
-  --brand-text-secondary: #666666;   /* Secondary text */
-  --brand-text-muted: #BDBDBD;       /* Muted / disabled */
-  --brand-border: #E5E5E5;           /* Border */
-  --brand-border-dark: #CCCCCC;      /* Stronger border */
+  /* ── TEXT (Light Mode) ── */
+  --brand-text-primary: #111111;
+  --brand-text-secondary: #555555;
+  --brand-text-muted: #888888;
+  --brand-text-disabled: #AAAAAA;
+  --brand-text-highlight: #F97316;
 
-  /* WARNING & ERROR */
-  --brand-warning: #F5A623;
+  /* ── BORDERS (Light Mode) ── */
+  --brand-border: #E5E5E5;
+  --brand-border-dark: #CCCCCC;
+
+  /* ── PRODUCT CARDS (Light Mode) ── */
+  --brand-card-bg: #FFFFFF;
+  --brand-card-border: #E5E5E5;
+  --brand-card-hover: #F9FAFB;
+  --brand-card-price: #111111;
+  --brand-card-old-price: #888888;
+
+  /* ── BADGES ── */
+  --brand-badge-sale: #EF4444;
+  --brand-badge-new: #22C55E;
+  --brand-badge-limited: #F59E0B;
+  --brand-badge-premium: #8B5CF6;
+
+  /* ── INPUT FIELDS (Light Mode) ── */
+  --brand-input-bg: #FFFFFF;
+  --brand-input-border: #D1D5DB;
+  --brand-input-focus: #F97316;
+  --brand-input-placeholder: #9CA3AF;
+  --brand-input-text: #111111;
+
+  /* ── STATUS COLORS ── */
+  --brand-success: #22C55E;
   --brand-error: #EF4444;
   --brand-error-dark: #DC2626;
+  --brand-warning: #F59E0B;
+  --brand-info: #3B82F6;
+
+  /* ── RATING ── */
+  --brand-rating-star: #FACC15;
+
+  /* ── NAVBAR (Light Mode) ── */
+  --brand-navbar-bg: #FFFFFF;
+  --brand-navbar-border: #E5E5E5;
+  --brand-navbar-active: #F97316;
+  --brand-navbar-normal: #555555;
+  --brand-navbar-hover: #111111;
+
+  /* ── ACCENT (legacy) ── */
+  --brand-accent: #22C55E;
+  --brand-accent-dark: #16A34A;
+  --brand-accent-light: #4ADE80;
 }
 
-/* Dark Mode — Warm Cream / Espresso Theme */
+/* ============================================
+   PREMIUM DARK eCOMMERCE THEME
+   Not pure black — eye-friendly, high-contrast,
+   conversion-optimised dark surfaces
+   ============================================ */
+
 .dark {
-  --brand-bg-primary: #16130E;       /* Deep warm espresso */
-  --brand-bg-secondary: #1E1A14;     /* Warm dark surface */
-  --brand-bg-tertiary: #26211A;      /* Warm card surface */
-  --brand-text-primary: #F2E8D9;     /* Warm cream white */
-  --brand-text-secondary: #C8B99A;   /* Warm tan */
-  --brand-text-muted: #8C7F6E;       /* Warm muted */
-  --brand-border: #38302A;           /* Dark warm border */
-  --brand-border-dark: #4A4038;      /* Stronger warm border */
+  /* BASE BACKGROUNDS */
+  --brand-bg-primary: #121212;          /* Main background */
+  --brand-bg-secondary: #181818;        /* Secondary background */
+  --brand-bg-section: #1E1E1E;          /* Section background */
+  --brand-bg-card: #222222;             /* Card background */
+  --brand-bg-card-elevated: #252525;    /* Elevated card */
+  --brand-bg-tertiary: #222222;         /* compat alias */
+
+  /* TEXT COLORS */
+  --brand-text-primary: #FFFFFF;        /* Primary text */
+  --brand-text-secondary: #B3B3B3;      /* Secondary text */
+  --brand-text-muted: #888888;          /* Muted text */
+  --brand-text-disabled: #666666;       /* Disabled text */
+  --brand-text-highlight: #F97316;      /* Highlighted text */
+
+  /* BRAND COLORS (same in dark — brand stays consistent) */
+  --brand-primary: #F97316;             /* Buy Now orange */
+  --brand-primary-dark: #EA580C;
+  --brand-primary-hover: #EA580C;
+  --brand-primary-active: #C2410C;
+  --brand-secondary-blue: #3B82F6;      /* Add to Cart blue */
+  --brand-secondary-blue-hover: #2563EB;
+  --brand-secondary-blue-active: #1D4ED8;
+
+  /* BORDERS */
+  --brand-border: #2A2A2A;
+  --brand-border-dark: #333333;
+
+  /* PRODUCT CARDS */
+  --brand-card-bg: #222222;
+  --brand-card-border: #2A2A2A;
+  --brand-card-hover: #2C2C2C;
+  --brand-card-price: #FFFFFF;
+  --brand-card-old-price: #888888;
+
+  /* BADGES */
+  --brand-badge-sale: #EF4444;
+  --brand-badge-new: #22C55E;
+  --brand-badge-limited: #F59E0B;
+  --brand-badge-premium: #8B5CF6;
+
+  /* INPUT FIELDS */
+  --brand-input-bg: #1E1E1E;
+  --brand-input-border: #2A2A2A;
+  --brand-input-focus: #F97316;
+  --brand-input-placeholder: #888888;
+  --brand-input-text: #FFFFFF;
+
+  /* STATUS COLORS */
+  --brand-success: #22C55E;
+  --brand-error: #EF4444;
+  --brand-error-dark: #DC2626;
+  --brand-warning: #F59E0B;
+  --brand-info: #3B82F6;
+
+  /* RATING */
+  --brand-rating-star: #FACC15;
+
+  /* NAVBAR */
+  --brand-navbar-bg: #181818;
+  --brand-navbar-border: #2A2A2A;
+  --brand-navbar-active: #F97316;
+  --brand-navbar-normal: #B3B3B3;
+  --brand-navbar-hover: #FFFFFF;
+
+  /* ACCENT (legacy) */
+  --brand-accent: #22C55E;
+  --brand-accent-dark: #16A34A;
+  --brand-accent-light: #4ADE80;
 }
 
 @theme {
@@ -88,21 +203,27 @@ layer(base);
   --color-transparent: transparent;
   --color-white: #ffffff;
   --color-black: #111111;
-  --color-dark: #1A1A1A;
+  --color-dark: #121212;
 
-  /* Semantic theme-aware colors (auto-switch light ↔ dark via CSS vars) */
+  /* ── Semantic theme-aware (auto light ↔ dark) ── */
   --color-theme-bg: var(--brand-bg-primary);
   --color-theme-bg-soft: var(--brand-bg-secondary);
-  --color-theme-bg-card: var(--brand-bg-tertiary);
+  --color-theme-bg-section: var(--brand-bg-section);
+  --color-theme-bg-card: var(--brand-bg-card);
+  --color-theme-bg-card-elevated: var(--brand-bg-card-elevated);
   --color-theme-text: var(--brand-text-primary);
   --color-theme-text-secondary: var(--brand-text-secondary);
   --color-theme-text-muted: var(--brand-text-muted);
+  --color-theme-text-disabled: var(--brand-text-disabled);
+  --color-theme-text-highlight: var(--brand-text-highlight);
   --color-theme-border: var(--brand-border);
   --color-theme-border-strong: var(--brand-border-dark);
 
-  /* Primary colors mapped from CSS variables */
+  /* ── Primary brand (Orange) ── */
   --color-primary: var(--brand-primary);
   --color-primary-dark: var(--brand-primary-dark);
+  --color-primary-hover: var(--brand-primary-hover);
+  --color-primary-active: var(--brand-primary-active);
   --color-primary-light: var(--brand-primary-light);
   --color-primary-50: var(--brand-primary-50);
   --color-primary-100: var(--brand-primary-100);
@@ -115,7 +236,12 @@ layer(base);
   --color-primary-800: var(--brand-primary-800);
   --color-primary-900: var(--brand-primary-900);
 
-  /* Secondary colors (Orange - CTA) */
+  /* ── Secondary brand (Blue) ── */
+  --color-secondary-blue: var(--brand-secondary-blue);
+  --color-secondary-blue-hover: var(--brand-secondary-blue-hover);
+  --color-secondary-blue-active: var(--brand-secondary-blue-active);
+
+  /* ── Near-black scale (legacy secondary) ── */
   --color-secondary: var(--brand-secondary);
   --color-secondary-dark: var(--brand-secondary-dark);
   --color-secondary-light: var(--brand-secondary-light);
@@ -130,20 +256,55 @@ layer(base);
   --color-secondary-800: var(--brand-secondary-800);
   --color-secondary-900: var(--brand-secondary-900);
 
-  /* Accent colors (Green - Success) */
+  /* ── Accent (legacy green) ── */
   --color-accent: var(--brand-accent);
   --color-accent-dark: var(--brand-accent-dark);
   --color-accent-light: var(--brand-accent-light);
 
-  /* Legacy color support */
-  --color-yellow: #fbb040;
-  --color-bg-color-dark: #1E1A14;
+  /* ── Product card colors ── */
+  --color-card-bg: var(--brand-card-bg);
+  --color-card-border: var(--brand-card-border);
+  --color-card-hover: var(--brand-card-hover);
+  --color-card-price: var(--brand-card-price);
+  --color-card-old-price: var(--brand-card-old-price);
 
+  /* ── Badge colors ── */
+  --color-badge-sale: var(--brand-badge-sale);
+  --color-badge-new: var(--brand-badge-new);
+  --color-badge-limited: var(--brand-badge-limited);
+  --color-badge-premium: var(--brand-badge-premium);
+
+  /* ── Input field colors ── */
+  --color-input-bg: var(--brand-input-bg);
+  --color-input-border: var(--brand-input-border);
+  --color-input-focus: var(--brand-input-focus);
+  --color-input-placeholder: var(--brand-input-placeholder);
+  --color-input-text: var(--brand-input-text);
+
+  /* ── Navbar colors ── */
+  --color-navbar-bg: var(--brand-navbar-bg);
+  --color-navbar-border: var(--brand-navbar-border);
+  --color-navbar-active: var(--brand-navbar-active);
+  --color-navbar-normal: var(--brand-navbar-normal);
+  --color-navbar-hover: var(--brand-navbar-hover);
+
+  /* ── Status colors ── */
+  --color-success: var(--brand-success);
+  --color-error: var(--brand-error);
+  --color-error-dark: var(--brand-error-dark);
+  --color-warning: var(--brand-warning);
+  --color-info: var(--brand-info);
+
+  /* ── Rating ── */
+  --color-rating-star: var(--brand-rating-star);
+
+  /* ── Legacy aliases ── */
+  --color-yellow: #FACC15;
+  --color-bg-color-dark: #181818;
   --color-body-color: var(--brand-text-muted);
-  --color-body-color-dark: #8C7F6E;
-
+  --color-body-color-dark: #888888;
   --color-stroke-stroke: var(--brand-border);
-  --color-stroke-dark: #38302A;
+  --color-stroke-dark: #2A2A2A;
 
   /* Gray scale */
   --color-gray-50: #f9fafb;
@@ -160,26 +321,22 @@ layer(base);
   --color-gray-dark: #1e232e;
   --color-gray-light: #f0f2f9;
 
-  /* Warning & Error */
-  --color-warning: var(--brand-warning);
-  --color-error: var(--brand-error);
-  --color-error-dark: var(--brand-error-dark);
-  --color-success: var(--brand-accent);
-
-  --shadow-sign-up: 0px 5px 10px rgba(4, 10, 34, 0.2);
-  --shadow-one: 0px 2px 3px rgba(7, 7, 77, 0.05);
-  --shadow-two: 0px 5px 10px rgba(6, 8, 15, 0.1);
-  --shadow-three: 0px 5px 15px rgba(6, 8, 15, 0.05);
-  --shadow-sticky: inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
-  --shadow-sticky-dark: inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
-  --shadow-feature-2: 0px 10px 40px rgba(245, 166, 35, 0.15);
-  --shadow-submit: 0px 5px 20px rgba(4, 10, 34, 0.1);
-  --shadow-submit-dark: 0px 5px 20px rgba(4, 10, 34, 0.1);
-  --shadow-btn: 0px 1px 2px rgba(4, 10, 34, 0.15);
-  --shadow-btn-hover: 0px 1px 2px rgba(0, 0, 0, 0.15);
-  --shadow-btn-light: 0px 1px 2px rgba(0, 0, 0, 0.1);
-
-  --drop-shadow-three: 0px 5px 15px rgba(6, 8, 15, 0.05);
+  /* Shadows */
+  --shadow-sign-up: 0px 5px 10px rgba(0, 0, 0, 0.35);
+  --shadow-one: 0px 2px 3px rgba(0, 0, 0, 0.15);
+  --shadow-two: 0px 5px 10px rgba(0, 0, 0, 0.25);
+  --shadow-three: 0px 5px 15px rgba(0, 0, 0, 0.15);
+  --shadow-sticky: inset 0 -1px 0 0 rgba(0, 0, 0, 0.15);
+  --shadow-sticky-dark: inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
+  --shadow-feature-2: 0px 10px 40px rgba(249, 115, 22, 0.18);
+  --shadow-submit: 0px 5px 20px rgba(0, 0, 0, 0.25);
+  --shadow-submit-dark: 0px 5px 20px rgba(0, 0, 0, 0.4);
+  --shadow-btn: 0px 1px 2px rgba(0, 0, 0, 0.25);
+  --shadow-btn-hover: 0px 4px 12px rgba(249, 115, 22, 0.3);
+  --shadow-btn-light: 0px 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0px 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0px 8px 32px rgba(0, 0, 0, 0.55);
+  --drop-shadow-three: 0px 5px 15px rgba(0, 0, 0, 0.25);
 }
 
 @utility container {
@@ -188,12 +345,8 @@ layer(base);
 }
 
 /*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
+  Tailwind CSS v4 border-color compatibility:
+  explicit border color utility to any element that depends on these defaults.
 */
 @layer base {
   *,
@@ -280,52 +433,67 @@ layer(base);
 
 /* ============================================
    GLOBAL DARK MODE OVERRIDES
-   Catches all legacy components that use hardcoded
-   bg-white / bg-gray-* / text-gray-* classes
+   Maps legacy Tailwind utility classes to the
+   new premium dark eCommerce color tokens.
    ============================================ */
 
-/* Backgrounds — light grays → warm soft surfaces */
+/* ── Backgrounds ── */
 .dark .bg-white {
-  background-color: var(--brand-bg-primary) !important;
+  background-color: var(--brand-bg-card) !important;
 }
 .dark .bg-gray-50,
 .dark .bg-gray-100 {
   background-color: var(--brand-bg-secondary) !important;
 }
 .dark .bg-gray-200 {
-  background-color: var(--brand-bg-tertiary) !important;
+  background-color: var(--brand-bg-section) !important;
 }
-
-/* Backgrounds — dark grays → warm espresso surfaces */
 .dark .bg-gray-900 {
-  background-color: #16130E !important;
+  background-color: #121212 !important;
 }
 .dark .bg-gray-800 {
-  background-color: #1E1A14 !important;
+  background-color: #181818 !important;
 }
 .dark .bg-gray-700 {
-  background-color: #26211A !important;
+  background-color: #1E1E1E !important;
+}
+.dark .bg-gray-600 {
+  background-color: #222222 !important;
 }
 
-/* Gradient from/to overrides */
+/* ── Gradient from/to overrides ── */
 .dark .from-gray-900,
 .dark .dark\:from-gray-900 {
-  --tw-gradient-from: #16130E !important;
+  --tw-gradient-from: #121212 !important;
 }
 .dark .to-gray-800,
 .dark .dark\:to-gray-800 {
-  --tw-gradient-to: #1E1A14 !important;
+  --tw-gradient-to: #181818 !important;
 }
 .dark .from-gray-800,
 .dark .dark\:from-gray-800 {
-  --tw-gradient-from: #1E1A14 !important;
+  --tw-gradient-from: #181818 !important;
 }
 .dark .to-gray-900,
 .dark .dark\:to-gray-900 {
-  --tw-gradient-to: #16130E !important;
+  --tw-gradient-to: #121212 !important;
+}
+.dark .from-white,
+.dark .via-white,
+.dark .to-white {
+  --tw-gradient-from: var(--brand-bg-card);
+  --tw-gradient-via: var(--brand-bg-card);
+  --tw-gradient-to: var(--brand-bg-card);
+}
+.dark .from-gray-50,
+.dark .via-gray-50,
+.dark .to-gray-50 {
+  --tw-gradient-from: var(--brand-bg-secondary);
+  --tw-gradient-via: var(--brand-bg-secondary);
+  --tw-gradient-to: var(--brand-bg-secondary);
 }
 
-/* Text colors */
+/* ── Text colors ── */
 .dark .text-gray-900,
 .dark .text-gray-800 {
   color: var(--brand-text-primary) !important;
@@ -339,11 +507,14 @@ layer(base);
 .dark .text-gray-300 {
   color: var(--brand-text-muted) !important;
 }
+.dark .text-gray-200 {
+  color: var(--brand-text-disabled) !important;
+}
 .dark .text-black {
   color: var(--brand-text-primary) !important;
 }
 
-/* Borders */
+/* ── Borders ── */
 .dark .border-gray-200,
 .dark .border-gray-300 {
   border-color: var(--brand-border) !important;
@@ -353,45 +524,48 @@ layer(base);
   border-color: var(--brand-border-dark) !important;
 }
 
-/* Hover backgrounds */
+/* ── Hover backgrounds ── */
 .dark .hover\:bg-gray-100:hover,
 .dark .hover\:bg-gray-50:hover {
-  background-color: var(--brand-bg-tertiary) !important;
+  background-color: var(--brand-card-hover) !important;
+}
+.dark .hover\:bg-white:hover {
+  background-color: var(--brand-bg-card-elevated) !important;
 }
 
-/* Inputs & form elements */
+/* ── Inputs & form elements ── */
 .dark input:not([class*="bg-"]),
 .dark textarea:not([class*="bg-"]),
 .dark select:not([class*="bg-"]) {
-  background-color: var(--brand-bg-secondary);
-  color: var(--brand-text-primary);
-  border-color: var(--brand-border);
+  background-color: var(--brand-input-bg);
+  color: var(--brand-input-text);
+  border-color: var(--brand-input-border);
 }
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: var(--brand-text-muted);
+  color: var(--brand-input-placeholder);
+}
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: var(--brand-input-focus);
+  outline-color: var(--brand-input-focus);
 }
 
-/* Cards and sections: gradient light backgrounds */
-.dark .from-white,
-.dark .via-white,
-.dark .to-white {
-  --tw-gradient-from: var(--brand-bg-primary);
-  --tw-gradient-via: var(--brand-bg-primary);
-  --tw-gradient-to: var(--brand-bg-primary);
+/* ── Shadows (dark-mode adjusted) ── */
+.dark .shadow-sm {
+  --tw-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--tw-shadow);
 }
-.dark .from-gray-50,
-.dark .via-gray-50,
-.dark .to-gray-50 {
-  --tw-gradient-from: var(--brand-bg-secondary);
-  --tw-gradient-via: var(--brand-bg-secondary);
-  --tw-gradient-to: var(--brand-bg-secondary);
+.dark .shadow-md {
+  --tw-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--tw-shadow);
 }
-
-/* Shadow adjustments for dark mode */
-.dark .shadow-md,
-.dark .shadow-lg,
+.dark .shadow-lg {
+  --tw-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--tw-shadow);
+}
 .dark .shadow-xl {
-  --tw-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --tw-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   box-shadow: var(--tw-shadow);
 }
