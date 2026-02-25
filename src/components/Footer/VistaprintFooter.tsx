@@ -7,9 +7,9 @@ import { Facebook, Twitter, Instagram, Linkedin, Youtube, Mail, Phone, MapPin } 
 
 export default function VistaprintFooter() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-[#111111] dark:bg-[#0E0B08] text-gray-300 dark:text-[#C8B99A]">
       {/* Newsletter Section */}
-      <div className="bg-gradient-to-r from-primary to-blue-600 py-12">
+      <div className="bg-gradient-to-r from-primary to-primary-dark py-12">
         <div className="w-full px-6 lg:px-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-white text-center md:text-left">
@@ -23,7 +23,7 @@ export default function VistaprintFooter() {
                   placeholder="Enter your email"
                   className="flex-1 px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
                 />
-                <button className="px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors whitespace-nowrap">
+                <button className="px-6 py-3 bg-[#111111] dark:bg-[#26211A] text-white font-semibold rounded-lg hover:bg-black dark:hover:bg-[#38302A] transition-colors whitespace-nowrap">
                   Subscribe
                 </button>
               </div>
@@ -44,7 +44,7 @@ export default function VistaprintFooter() {
               height={40}
               className="h-10 w-auto mb-4 brightness-0 invert"
             />
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className="text-gray-400 dark:text-[#8C7F6E] mb-6 leading-relaxed">
               India's leading custom printing and merchandise company. We bring your brand to life with premium quality products and exceptional service.
             </p>
 
@@ -108,24 +108,24 @@ export default function VistaprintFooter() {
         </div>
 
         {/* Social Media */}
-        <div className="mt-12 pt-8 border-t border-gray-800">
+        <div className="mt-12 pt-8 border-t border-gray-800 dark:border-[#2A2018]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <span className="text-gray-400">Follow Us:</span>
               <div className="flex gap-3">
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary transition-colors">
                   <Facebook className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary transition-colors">
                   <Twitter className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary transition-colors">
                   <Instagram className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary transition-colors">
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                <a href="#" className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded-full flex items-center justify-center hover:bg-primary dark:hover:bg-primary transition-colors">
                   <Youtube className="w-5 h-5" />
                 </a>
               </div>
@@ -136,7 +136,7 @@ export default function VistaprintFooter() {
               <span className="text-gray-400 text-sm">We Accept:</span>
               <div className="flex gap-2">
                 {['💳', '💰', '📱'].map((icon, idx) => (
-                  <div key={idx} className="w-10 h-10 bg-gray-800 rounded flex items-center justify-center text-xl">
+                  <div key={idx} className="w-10 h-10 bg-gray-800 dark:bg-[#26211A] rounded flex items-center justify-center text-xl">
                     {icon}
                   </div>
                 ))}
@@ -146,8 +146,8 @@ export default function VistaprintFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400">
+        <div className="mt-8 pt-8 border-t border-gray-800 dark:border-[#2A2018]">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400 dark:text-[#8C7F6E]">
             <p>&copy; 2024 The CrossWild. All rights reserved.</p>
             <div className="flex gap-6">
               <Link href="#" className="hover:text-primary transition-colors">Privacy Policy</Link>

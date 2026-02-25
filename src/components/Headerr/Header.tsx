@@ -841,15 +841,17 @@ import {
 } from "react-icons/fa";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
-import { useCart } from "@/contexts/CartContext";
+import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { selectTotalItems } from "@/store/slices/cartSlice";
+import { openCart } from "@/store/slices/uiSlice";
 import CartDrawer from "@/components/Cart/CartDrawer";
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const { getTotalItems } = useCart();
+  const dispatch = useAppDispatch();
+  const totalItems = useAppSelector(selectTotalItems);
 
   const menuRef = useRef(null);
   const menuButtonRef = useRef(null);
@@ -1182,13 +1184,13 @@ export default function App() {
             </Link>
           </div>
           <button
-            onClick={() => setIsCartOpen(true)}
+            onClick={() => dispatch(openCart())}
             className="flex items-center text-gray-600 transition-colors hover:text-gray-900 relative"
           >
             <ShoppingCart className="h-6 w-6" />
-            {getTotalItems() > 0 && (
+            {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                {getTotalItems()}
+                {totalItems}
               </span>
             )}
             <span className="ml-1 hidden lg:block">Cart</span>
@@ -1439,7 +1441,7 @@ export default function App() {
       </div>
 
       {/* Cart Drawer */}
-      <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <CartDrawer />
     </nav>
   );
 }

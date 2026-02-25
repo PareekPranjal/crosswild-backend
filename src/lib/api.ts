@@ -1,10 +1,9 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api';
-
-// Debug: Log the API URL being used
-if (typeof window !== 'undefined') {
-  console.log('API_URL being used:', API_URL);
-  console.log('NEXT_PUBLIC_API_URL env:', process.env.NEXT_PUBLIC_API_URL);
-}
+// Browser → relative /api (same origin, no CORS, proxied by Next.js rewrites)
+// SSR    → direct backend URL (server-to-server, no CORS)
+const API_URL =
+  typeof window !== 'undefined'
+    ? '/api'
+    : `${process.env.BACKEND_URL || 'http://localhost:5001'}/api`;
 
 interface Product {
   _id: string;

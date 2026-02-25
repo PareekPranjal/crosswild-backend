@@ -9,7 +9,6 @@ import SEOHead from "@/components/SEO/SEOHead";
 import { Inter } from "next/font/google";
 import "../styles/index.css";
 import { Providers } from "./providers";
-import { CartProvider } from "@/contexts/CartContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,17 +26,15 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <meta name="theme-color" content="#2563EB" />
       </head>
-      <body className={`bg-white dark:bg-black ${inter.className}`}>
+      <body className={`bg-theme-bg text-theme-text transition-colors duration-200 ${inter.className}`}>
         <Providers>
-          <CartProvider>
-            <SEOHead />
-            <VistaprintHeader />
-            {children}
-            <VistaprintFooter />
-            <ScrollToTop />
-            <WhatsAppButton />
-            <CallButton />
-          </CartProvider>
+          <SEOHead />
+          <VistaprintHeader />
+          {children}
+          <VistaprintFooter />
+          <ScrollToTop />
+          <WhatsAppButton />
+          <CallButton />
         </Providers>
       </body>
     </html>

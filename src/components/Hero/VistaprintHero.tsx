@@ -6,7 +6,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function VistaprintHero() {
   return (
-    <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <section className="bg-theme-bg">
       {/* Promotional Banner */}
       <div className="bg-gradient-to-r from-secondary to-secondary-600 text-white py-3">
         <div className="w-full px-6 lg:px-12 text-center">
@@ -47,7 +47,7 @@ export default function VistaprintHero() {
               </Link>
               <Link
                 href="/our_process"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-primary hover:text-primary transition-all"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-theme-border text-theme-text font-semibold rounded-lg hover:border-primary hover:text-primary transition-all"
               >
                 How It Works
               </Link>

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useCallback, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Star, Award, Sparkles, Loader2, MessageCircle, Mail } from "lucide-react";
-import { productsAPI, Product } from "@/lib/api";
+import { useProducts } from "@/hooks/useProducts";
+import { Product } from "@/lib/api";
 
 const WHATSAPP_NUMBER = '+919529626262';
 const EMAIL_ADDRESS = 'orders@thecrosswild.com';
@@ -24,8 +25,7 @@ const getEmailLink = (product: Product) => {
   return `mailto:${EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
 };
 
-// Tab Button Component
-const TabButton = ({ isActive, label, icon: Icon, onClick }: { isActive: boolean; label: string; icon: any; onClick: () => void }) => (
+const TabButton = memo(({ isActive, label, icon: Icon, onClick }: { isActive: boolean; label: string; icon: any; onClick: () => void }) => (
   <button
     className={`flex items-center gap-2 pb-3 px-6 text-lg md:text-xl font-bold transition-all duration-300 border-b-4 ${
       isActive
@@ -37,10 +37,10 @@ const TabButton = ({ isActive, label, icon: Icon, onClick }: { isActive: boolean
     <Icon className="w-5 h-5" />
     {label}
   </button>
-);
+));
+TabButton.displayName = 'TabButton';
 
-// Product Card Component
-const ProductCard = ({ product }: { product: Product }) => (
+const ProductCard = memo(({ product }: { product: Product }) => (
   <div className="flex-none w-72 md:w-80 lg:w-72 xl:w-80 p-3">
     <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
       {/* Image Container */}
@@ -107,72 +107,44 @@ const ProductCard = ({ product }: { product: Product }) => (
             href={getWhatsAppLink(product)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold rounded-xl transition-colors"
+            className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
-            WhatsApp
           </a>
           <a
             href={getEmailLink(product)}
-            className="flex items-center justify-center px-3 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
+            className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
           >
             <Mail className="w-4 h-4" />
           </a>
-          <Link
-            href={`/products/${product.id}`}
-            className="flex items-center justify-center px-3 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </Link>
         </div>
       </div>
     </div>
   </div>
-);
+));
+ProductCard.displayName = 'ProductCard';
 
-// Main Component
 const BestSellersAndNewArrivals = () => {
   const [activeTab, setActiveTab] = useState("bestSellers");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [bestSellers, setBestSellers] = useState<Product[]>([]);
-  const [newArrivals, setNewArrivals] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const [bestSellerRes, newArrivalRes] = await Promise.all([
-          productsAPI.getAll({ bestSeller: true, limit: 8 }),
-          productsAPI.getAll({ newArrival: true, limit: 8 }),
-        ]);
-        setBestSellers(bestSellerRes.products);
-        setNewArrivals(newArrivalRes.products);
-      } catch (err) {
-        console.error('Failed to fetch products:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+  const { data: bestSellerData, isLoading: loadingBest } = useProducts({ bestSeller: true, limit: 8 });
+  const { data: newArrivalData, isLoading: loadingNew } = useProducts({ newArrival: true, limit: 8 });
 
+  const bestSellers = bestSellerData?.products ?? [];
+  const newArrivals = newArrivalData?.products ?? [];
+  const loading = loadingBest && loadingNew;
   const currentProducts = activeTab === "bestSellers" ? bestSellers : newArrivals;
 
-  const scroll = (direction: "left" | "right") => {
+  const scroll = useCallback((direction: "left" | "right") => {
     if (scrollContainerRef.current) {
-      const { current } = scrollContainerRef;
-      const scrollAmount = 350;
-      if (direction === "left") {
-        current.scrollLeft -= scrollAmount;
-      } else {
-        current.scrollLeft += scrollAmount;
-      }
+      scrollContainerRef.current.scrollLeft += direction === "left" ? -350 : 350;
     }
-  };
+  }, []);
 
   if (loading) {
     return (
-      <section className="py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <section className="py-16 bg-theme-bg-soft">
         <div className="flex justify-center items-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
@@ -232,14 +204,14 @@ const BestSellersAndNewArrivals = () => {
             <>
               <button
                 onClick={() => scroll("left")}
-                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-700"
+                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-4 bg-theme-bg rounded-full shadow-xl z-20 hover:bg-theme-bg-soft transition-all hover:scale-110 border-2 border-theme-border"
                 aria-label="Scroll left"
               >
                 <ChevronLeft size={24} className="text-gray-800 dark:text-white" />
               </button>
               <button
                 onClick={() => scroll("right")}
-                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-4 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border-2 border-gray-200 dark:border-gray-700"
+                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-4 bg-theme-bg rounded-full shadow-xl z-20 hover:bg-theme-bg-soft transition-all hover:scale-110 border-2 border-theme-border"
                 aria-label="Scroll right"
               >
                 <ChevronRight size={24} className="text-gray-800 dark:text-white" />

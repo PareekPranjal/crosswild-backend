@@ -1,14 +1,18 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useCart } from '@/contexts/CartContext';
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { selectCartItems, selectTotalPrice, clearCart } from '@/store/slices/cartSlice';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowLeft, Package, Truck, CheckCircle, Mail, MessageCircle } from 'lucide-react';
 import { ordersAPI } from '@/lib/api';
 
 export default function CheckoutPage() {
-  const { cart, getTotalPrice, clearCart } = useCart();
+  const dispatch = useAppDispatch();
+  const cart = useAppSelector(selectCartItems);
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const getTotalPrice = () => totalPrice;
   const [step, setStep] = useState(1);
   const [contactMethod, setContactMethod] = useState<'whatsapp' | 'email'>('whatsapp');
   const [submitting, setSubmitting] = useState(false);
@@ -116,7 +120,7 @@ export default function CheckoutPage() {
 
       // Clear cart after a delay
       setTimeout(() => {
-        clearCart();
+        dispatch(clearCart());
       }, 2000);
     } catch (error) {
       console.error('Failed to submit order:', error);

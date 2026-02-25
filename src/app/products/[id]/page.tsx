@@ -252,12 +252,12 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
       </div>
 
       <div className="w-full px-6 lg:px-12 py-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
+        <div className="grid lg:grid-cols-[38%_62%] gap-6 lg:gap-10 mb-12">
           {/* Product Images */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm">
-              <div className="relative aspect-square">
+            <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm aspect-square w-full">
+              <div className="absolute inset-0">
                 {images[selectedImage] ? (
                   <Image
                     src={images[selectedImage]}
@@ -334,12 +334,12 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
             {/* Thumbnail Images */}
             {images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <div className="flex gap-2 overflow-x-auto pb-1">
                 {images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`relative w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden transition-all ${
+                    className={`relative w-14 h-14 flex-shrink-0 rounded-lg overflow-hidden transition-all ${
                       selectedImage === idx
                         ? 'ring-2 ring-primary ring-offset-2'
                         : 'opacity-70 hover:opacity-100'
@@ -590,7 +590,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
         {/* Product Specifications - Dynamic Details */}
         {product.details && Object.keys(product.details).length > 0 && (
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm mb-8">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
               {product.productType?.icon && <span className="mr-2">{product.productType.icon}</span>}
               {product.productType?.name || 'Product'} Specifications
@@ -614,7 +614,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         )}
 
         {/* Product Details Section */}
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Features */}
           <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-sm">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Product Details</h2>

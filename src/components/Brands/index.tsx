@@ -9,7 +9,7 @@ const Brands = () => {
   const duplicatedBrands = [...brandsData, ...brandsData];
 
   return (
-    <section className="py-12 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
+    <section className="py-12 bg-theme-bg-soft overflow-hidden">
       <div className="w-full px-6 lg:px-12">
         {/* Heading */}
         <div className="text-center mb-8">
@@ -24,8 +24,8 @@ const Brands = () => {
         {/* Scrolling Marquee Container */}
         <div className="relative">
           {/* Gradient Overlays for fade effect */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-900 z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-900 z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-theme-bg-soft to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-theme-bg-soft to-transparent z-10 pointer-events-none"></div>
 
           {/* Infinite Scroll Wrapper */}
           <div className="flex overflow-hidden">

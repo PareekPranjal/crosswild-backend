@@ -63,15 +63,26 @@ const formatCategoryName = (category: string) => {
 function ProductsContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
+  const searchParam = searchParams.get('search');
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(searchParam || '');
   const [selectedCategory, setSelectedCategory] = useState(categoryParam || 'all');
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Sync URL params when they change (e.g. header search navigation)
+  useEffect(() => {
+    if (categoryParam) setSelectedCategory(categoryParam);
+    else setSelectedCategory('all');
+  }, [categoryParam]);
+
+  useEffect(() => {
+    if (searchParam !== null) setSearchQuery(searchParam);
+  }, [searchParam]);
 
   // Fetch products from API
   useEffect(() => {
@@ -81,9 +92,7 @@ function ProductsContent() {
         setError(null);
         const params: Record<string, string> = {};
 
-        if (selectedCategory !== 'all') {
-          params.category = selectedCategory;
-        }
+        if (selectedCategory !== 'all') params.category = selectedCategory;
 
         const response = await productsAPI.getAll(params);
         setProducts(response.products || []);
@@ -97,13 +106,6 @@ function ProductsContent() {
 
     fetchProducts();
   }, [selectedCategory]);
-
-  // Update category when URL parameter changes
-  useEffect(() => {
-    if (categoryParam) {
-      setSelectedCategory(categoryParam);
-    }
-  }, [categoryParam]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -150,10 +152,10 @@ function ProductsContent() {
 
   // Product Card Component
   const ProductCard = ({ product }: { product: Product }) => (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
+    <div className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700">
       {/* Image Container */}
       <Link href={`/products/${product.id}`} className="block relative">
-        <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 overflow-hidden">
+        <div className="relative aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800 overflow-hidden">
           {product.image ? (
             <Image
               src={product.image}
@@ -194,60 +196,23 @@ function ProductsContent() {
       </Link>
 
       {/* Content */}
-      <div className="p-5">
-        {/* Category Tag */}
-        <span className="inline-block px-2.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium rounded-full mb-3">
-          {formatCategoryName(product.category)}
-        </span>
-
+      <div className="p-3 sm:p-4">
         {/* Title */}
         <Link href={`/products/${product.id}`}>
-          <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+          <h3 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-white mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">
             {product.title || product.name}
           </h3>
         </Link>
 
-        {/* Description */}
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">
-          {product.description}
-        </p>
-
         {/* Rating */}
         {product.rating > 0 && (
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center gap-0.5">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${
-                    i < Math.floor(product.rating)
-                      ? 'fill-amber-400 text-amber-400'
-                      : 'fill-gray-200 text-gray-200 dark:fill-gray-600 dark:text-gray-600'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1.5 mb-2">
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
               {product.rating.toFixed(1)}
             </span>
             {product.reviews > 0 && (
               <span className="text-xs text-gray-400">({product.reviews})</span>
-            )}
-          </div>
-        )}
-
-        {/* Available Options */}
-        {(product.colors?.length || product.sizes?.length) && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {product.colors && product.colors.length > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {product.colors.length} colors
-              </span>
-            )}
-            {product.sizes && product.sizes.length > 0 && (
-              <span className="text-xs text-gray-500 dark:text-gray-400">
-                {product.sizes.length} sizes
-              </span>
             )}
           </div>
         )}
@@ -258,21 +223,21 @@ function ProductsContent() {
             href={getWhatsAppLink(product)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold rounded-xl transition-colors"
+            className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
           >
             <MessageCircle className="w-4 h-4" />
-            WhatsApp
           </a>
           <a
             href={getEmailLink(product)}
-            className="flex items-center justify-center px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
+            className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
           >
             <Mail className="w-4 h-4" />
           </a>
           <Link
             href={`/products/${product.id}`}
-            className="flex items-center justify-center px-4 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors"
+            className="flex-1 flex items-center justify-center gap-1 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl transition-colors"
           >
+            View
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -282,9 +247,9 @@ function ProductsContent() {
 
   // List View Card
   const ProductListCard = ({ product }: { product: Product }) => (
-    <div className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex">
+    <div className="group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex">
       {/* Image */}
-      <Link href={`/products/${product.id}`} className="relative w-48 md:w-64 flex-shrink-0">
+      <Link href={`/products/${product.id}`} className="relative w-32 sm:w-44 md:w-56 flex-shrink-0">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-gray-700 dark:to-gray-800">
           {product.image ? (
             <Image
@@ -359,16 +324,15 @@ function ProductsContent() {
             href={getWhatsAppLink(product)}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-6 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white font-semibold rounded-xl transition-colors"
+            className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
           >
-            <MessageCircle className="w-5 h-5" />
-            WhatsApp Inquiry
+            <MessageCircle className="w-4 h-4" />
           </a>
           <a
             href={getEmailLink(product)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl transition-colors"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 font-semibold rounded-xl transition-colors"
           >
-            <Mail className="w-5 h-5" />
+            <Mail className="w-4 h-4" />
             Email
           </a>
           <Link
@@ -572,7 +536,7 @@ function ProductsContent() {
                 </button>
               </div>
             ) : viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

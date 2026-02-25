@@ -1,19 +1,22 @@
+import dynamic from "next/dynamic";
+import { Metadata } from "next";
 import VistaprintHero from "@/components/Hero/VistaprintHero";
 import VistaprintCategories from "@/components/Categories/VistaprintCategories";
-import ExploreAllCategories from "@/components/Categories/ExploreAllCategories";
-import PopularProducts from "@/components/Products/PopularProducts";
-import TrendingProducts from "@/components/Products/TrendingProducts";
-import ShopByCategory from "@/components/Products/ShopByCategory";
-import DealsSection from "@/components/Promotions/DealsSection";
 import TrustSection from "@/components/Features/TrustSection";
-import Brands from "@/components/Brands";
 import ScrollUp from "@/components/Common/ScrollUp";
-import Contact from "@/components/Contact";
-import Testimonials from "@/components/Testimonials";
-import Process from "@/components/Process/Process";
-import BestSellersAndNewArrivals from "@/components/CategorySection/BestSellersAndNewArrivals";
-import OfficeLocationsHome from "@/components/Locations/OfficeLocationsHome";
-import { Metadata } from "next";
+
+// Below-the-fold components — lazy loaded for faster initial page render
+const ExploreAllCategories = dynamic(() => import("@/components/Categories/ExploreAllCategories"));
+const PopularProducts = dynamic(() => import("@/components/Products/PopularProducts"));
+const TrendingProducts = dynamic(() => import("@/components/Products/TrendingProducts"));
+const ShopByCategory = dynamic(() => import("@/components/Products/ShopByCategory"));
+const BestSellersAndNewArrivals = dynamic(() => import("@/components/CategorySection/BestSellersAndNewArrivals"));
+const DealsSection = dynamic(() => import("@/components/Promotions/DealsSection"));
+const Process = dynamic(() => import("@/components/Process/Process"));
+const Testimonials = dynamic(() => import("@/components/Testimonials"));
+const Brands = dynamic(() => import("@/components/Brands"));
+const Contact = dynamic(() => import("@/components/Contact"));
+const OfficeLocationsHome = dynamic(() => import("@/components/Locations/OfficeLocationsHome"));
 
 
 

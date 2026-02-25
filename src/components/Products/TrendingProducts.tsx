@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { productsAPI, Product } from '@/lib/api';
+import { Product } from '@/lib/api';
+import { useProducts } from '@/hooks/useProducts';
 import { Star, Zap, ArrowRight, Loader2, MessageCircle, Mail, ChevronRight } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '+919529626262';
@@ -25,33 +26,18 @@ const getEmailLink = (product: Product) => {
 };
 
 export default function TrendingProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: newData, isLoading: loadingNew } = useProducts({ newArrival: true, limit: 6 });
+  const { data: featuredData, isLoading: loadingFeatured } = useProducts({ featured: true, limit: 6 });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const [newRes, featuredRes] = await Promise.all([
-          productsAPI.getAll({ newArrival: true, limit: 6 }),
-          productsAPI.getAll({ featured: true, limit: 6 }),
-        ]);
-        const allProducts = [...newRes.products, ...featuredRes.products];
-        const unique = allProducts.filter(
-          (p, i, arr) => arr.findIndex(x => x.id === p.id) === i
-        ).slice(0, 6);
-        setProducts(unique);
-      } catch (err) {
-        console.error('Failed to fetch trending products:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
+  const loading = loadingNew || loadingFeatured;
+  const products = useMemo(() => {
+    const all = [...(newData?.products ?? []), ...(featuredData?.products ?? [])];
+    return all.filter((p, i, arr) => arr.findIndex(x => x.id === p.id) === i).slice(0, 6);
+  }, [newData, featuredData]);
 
   if (loading) {
     return (
-      <section className="py-16 bg-white dark:bg-gray-900">
+      <section className="py-16 bg-theme-bg">
         <div className="flex justify-center items-center py-20">
           <Loader2 className="w-8 h-8 animate-spin text-primary" />
         </div>
@@ -62,11 +48,11 @@ export default function TrendingProducts() {
   if (products.length === 0) return null;
 
   return (
-    <section className="py-16 bg-white dark:bg-gray-900">
+    <section className="py-16 bg-theme-bg">
       <div className="w-full px-6 lg:px-12">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-purple-100 text-purple-600 px-4 py-2 rounded-full font-semibold mb-4 animate-pulse">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full font-semibold mb-4 animate-pulse">
             <Zap className="w-4 h-4" />
             Hot Right Now
           </div>
@@ -79,17 +65,17 @@ export default function TrendingProducts() {
         </div>
 
         {/* Products Grid - Featured Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8">
           {products.map((product, index) => (
             <div
               key={product.id}
-              className={`group relative bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
+              className={`group relative bg-theme-bg-card dark:bg-[#26211A] rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 ${
                 index === 0 ? 'lg:col-span-2 lg:row-span-2' : ''
               }`}
             >
               {/* Image Container */}
               {index === 0 ? (
-                <div className="relative overflow-hidden h-96 lg:h-full">
+                <div className="relative overflow-hidden h-52 sm:h-96 lg:h-full">
                   <Link href={`/products/${product.id}`} className="block absolute inset-0">
                     {product.image && (
                       <Image
@@ -134,15 +120,14 @@ export default function TrendingProducts() {
                         </span>
                       </div>
                     )}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       <a
                         href={getWhatsAppLink(product)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-5 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white font-semibold rounded-lg transition-colors"
+                        className="flex items-center justify-center px-4 py-3 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-colors"
                       >
                         <MessageCircle className="w-5 h-5" />
-                        WhatsApp
                       </a>
                       <a
                         href={getEmailLink(product)}
@@ -150,20 +135,13 @@ export default function TrendingProducts() {
                       >
                         <Mail className="w-5 h-5" />
                       </a>
-                      <Link
-                        href={`/products/${product.id}`}
-                        className="flex items-center gap-2 px-5 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
-                      >
-                        View Details
-                        <ChevronRight className="w-4 h-4" />
-                      </Link>
                     </div>
                   </div>
                 </div>
               ) : (
                 <Link
                   href={`/products/${product.id}`}
-                  className="block relative overflow-hidden h-64"
+                  className="block relative overflow-hidden h-40 sm:h-64"
                 >
                   {product.image && (
                     <Image
@@ -195,7 +173,7 @@ export default function TrendingProducts() {
 
               {/* Product Info (for small cards) */}
               {index !== 0 && (
-                <div className="p-5 bg-white dark:bg-gray-800">
+                <div className="p-5 bg-theme-bg-card dark:bg-[#26211A]">
                   <Link href={`/products/${product.id}`}>
                     <h3 className="font-bold text-lg mb-2 line-clamp-2 hover:text-primary transition-colors">
                       {product.title || product.name}
@@ -215,29 +193,22 @@ export default function TrendingProducts() {
                     </div>
                   )}
 
-                  {/* CTA Buttons - WhatsApp, Email, View */}
+                  {/* CTA Buttons - WhatsApp, Email */}
                   <div className="flex gap-2">
                     <a
                       href={getWhatsAppLink(product)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold rounded-xl transition-colors"
+                      className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      WhatsApp
                     </a>
                     <a
                       href={getEmailLink(product)}
-                      className="flex items-center justify-center px-3 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
+                      className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
                     >
                       <Mail className="w-4 h-4" />
                     </a>
-                    <Link
-                      href={`/products/${product.id}`}
-                      className="flex items-center justify-center px-3 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </Link>
                   </div>
                 </div>
               )}
@@ -249,7 +220,7 @@ export default function TrendingProducts() {
         <div className="text-center">
           <Link
             href="/products"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all shadow-lg hover:shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl"
           >
             <Zap className="w-5 h-5" />
             <span>Explore All Trending Products</span>

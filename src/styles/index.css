@@ -7,71 +7,72 @@ layer(base);
 
 /* ============================================
    CENTRALIZED COLOR CONFIGURATION
-   Change these values to update the entire website color scheme
+   Light: Warm Amber · Pure White · Light Gray
+   Dark:  Warm Cream / Espresso theme
    ============================================ */
 
 :root {
-  /* Primary Color - Blue (Trust & Security) */
-  --brand-primary: #2563EB;          /* Modern Blue - Main brand color */
-  --brand-primary-dark: #1E40AF;     /* Deep Blue - Hover states */
-  --brand-primary-light: #3B82F6;    /* Light Blue - Subtle highlights */
-  --brand-primary-50: #EFF6FF;       /* Very light blue background */
-  --brand-primary-100: #DBEAFE;
-  --brand-primary-200: #BFDBFE;
-  --brand-primary-300: #93C5FD;
-  --brand-primary-400: #60A5FA;
-  --brand-primary-500: #3B82F6;
-  --brand-primary-600: #2563EB;
-  --brand-primary-700: #1D4ED8;
-  --brand-primary-800: #1E40AF;
-  --brand-primary-900: #1E3A8A;
+  /* PRIMARY: Warm Amber/Orange (Brand Accent & CTA) */
+  --brand-primary: #F5A623;          /* Warm Amber - Main brand color */
+  --brand-primary-dark: #E69500;     /* Deep Amber - Hover states */
+  --brand-primary-light: #FFBB4D;    /* Light Amber - Highlights */
+  --brand-primary-50: #FFFBF0;       /* Whisper amber */
+  --brand-primary-100: #FFF3D0;
+  --brand-primary-200: #FFE5A0;
+  --brand-primary-300: #FFD06B;
+  --brand-primary-400: #FFBA40;
+  --brand-primary-500: #F5A623;
+  --brand-primary-600: #E69500;
+  --brand-primary-700: #C97800;
+  --brand-primary-800: #A56000;
+  --brand-primary-900: #7A4800;
 
-  /* Secondary Color - Orange (Call to Action) */
-  --brand-secondary: #F97316;        /* Orange - CTA buttons */
-  --brand-secondary-dark: #EA580C;   /* Dark Orange - Hover states */
-  --brand-secondary-light: #FB923C;  /* Light Orange - Highlights */
-  --brand-secondary-50: #FFF7ED;
-  --brand-secondary-100: #FFEDD5;
-  --brand-secondary-200: #FED7AA;
-  --brand-secondary-300: #FDBA74;
-  --brand-secondary-400: #FB923C;
-  --brand-secondary-500: #F97316;
-  --brand-secondary-600: #EA580C;
-  --brand-secondary-700: #C2410C;
-  --brand-secondary-800: #9A3412;
-  --brand-secondary-900: #7C2D12;
+  /* SECONDARY: Near Black (Headings & Strong Elements) */
+  --brand-secondary: #111111;        /* Near Black - Headings */
+  --brand-secondary-dark: #000000;   /* Pure Black */
+  --brand-secondary-light: #333333;  /* Dark Gray */
+  --brand-secondary-50: #F5F5F5;
+  --brand-secondary-100: #EBEBEB;
+  --brand-secondary-200: #D6D6D6;
+  --brand-secondary-300: #ADADAD;
+  --brand-secondary-400: #6B6B6B;
+  --brand-secondary-500: #333333;
+  --brand-secondary-600: #222222;
+  --brand-secondary-700: #1A1A1A;
+  --brand-secondary-800: #111111;
+  --brand-secondary-900: #080808;
 
-  /* Accent Color - Green (Success states) */
-  --brand-accent: #10B981;           /* Green - Success, confirmed */
+  /* ACCENT: Emerald Green (Success states) */
+  --brand-accent: #10B981;           /* Emerald - Success, confirmed */
   --brand-accent-dark: #059669;
   --brand-accent-light: #34D399;
 
-  /* Neutral Colors */
-  --brand-bg-primary: #FFFFFF;       /* Main background */
-  --brand-bg-secondary: #F9FAFB;     /* Secondary background */
-  --brand-bg-tertiary: #F3F4F6;      /* Cards, sections */
-  --brand-text-primary: #111827;     /* Main text */
-  --brand-text-secondary: #1F2937;   /* Secondary text */
-  --brand-text-muted: #6B7280;       /* Muted text */
-  --brand-border: #E5E7EB;           /* Borders */
-  --brand-border-dark: #D1D5DB;      /* Darker borders */
+  /* NEUTRAL: Pure White & Soft Gray */
+  --brand-bg-primary: #FFFFFF;       /* Pure White - Main background */
+  --brand-bg-secondary: #F7F7F7;     /* Soft Gray - Sections */
+  --brand-bg-tertiary: #FFFFFF;      /* Card Background */
+  --brand-text-primary: #222222;     /* Main text */
+  --brand-text-secondary: #666666;   /* Secondary text */
+  --brand-text-muted: #BDBDBD;       /* Muted / disabled */
+  --brand-border: #E5E5E5;           /* Border */
+  --brand-border-dark: #CCCCCC;      /* Stronger border */
 
-  /* Warning & Error */
-  --brand-warning: #F59E0B;
+  /* WARNING & ERROR */
+  --brand-warning: #F5A623;
   --brand-error: #EF4444;
   --brand-error-dark: #DC2626;
 }
 
-/* Dark mode overrides (optional) */
+/* Dark Mode — Warm Cream / Espresso Theme */
 .dark {
-  --brand-bg-primary: #121723;
-  --brand-bg-secondary: #171c28;
-  --brand-bg-tertiary: #1d2430;
-  --brand-text-primary: #F9FAFB;
-  --brand-text-secondary: #E5E7EB;
-  --brand-text-muted: #9CA3AF;
-  --brand-border: #374151;
-  --brand-border-dark: #4B5563;
+  --brand-bg-primary: #16130E;       /* Deep warm espresso */
+  --brand-bg-secondary: #1E1A14;     /* Warm dark surface */
+  --brand-bg-tertiary: #26211A;      /* Warm card surface */
+  --brand-text-primary: #F2E8D9;     /* Warm cream white */
+  --brand-text-secondary: #C8B99A;   /* Warm tan */
+  --brand-text-muted: #8C7F6E;       /* Warm muted */
+  --brand-border: #38302A;           /* Dark warm border */
+  --brand-border-dark: #4A4038;      /* Stronger warm border */
 }
 
 @theme {
@@ -86,8 +87,18 @@ layer(base);
   --color-current: currentColor;
   --color-transparent: transparent;
   --color-white: #ffffff;
-  --color-black: #121723;
-  --color-dark: #1d2430;
+  --color-black: #111111;
+  --color-dark: #1A1A1A;
+
+  /* Semantic theme-aware colors (auto-switch light ↔ dark via CSS vars) */
+  --color-theme-bg: var(--brand-bg-primary);
+  --color-theme-bg-soft: var(--brand-bg-secondary);
+  --color-theme-bg-card: var(--brand-bg-tertiary);
+  --color-theme-text: var(--brand-text-primary);
+  --color-theme-text-secondary: var(--brand-text-secondary);
+  --color-theme-text-muted: var(--brand-text-muted);
+  --color-theme-border: var(--brand-border);
+  --color-theme-border-strong: var(--brand-border-dark);
 
   /* Primary colors mapped from CSS variables */
   --color-primary: var(--brand-primary);
@@ -126,13 +137,13 @@ layer(base);
 
   /* Legacy color support */
   --color-yellow: #fbb040;
-  --color-bg-color-dark: #171c28;
+  --color-bg-color-dark: #1E1A14;
 
   --color-body-color: var(--brand-text-muted);
-  --color-body-color-dark: #959cb1;
+  --color-body-color-dark: #8C7F6E;
 
   --color-stroke-stroke: var(--brand-border);
-  --color-stroke-dark: #353943;
+  --color-stroke-dark: #38302A;
 
   /* Gray scale */
   --color-gray-50: #f9fafb;
@@ -161,7 +172,7 @@ layer(base);
   --shadow-three: 0px 5px 15px rgba(6, 8, 15, 0.05);
   --shadow-sticky: inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
   --shadow-sticky-dark: inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
-  --shadow-feature-2: 0px 10px 40px rgba(37, 99, 235, 0.12);
+  --shadow-feature-2: 0px 10px 40px rgba(245, 166, 35, 0.15);
   --shadow-submit: 0px 5px 20px rgba(4, 10, 34, 0.1);
   --shadow-submit-dark: 0px 5px 20px rgba(4, 10, 34, 0.1);
   --shadow-btn: 0px 1px 2px rgba(4, 10, 34, 0.15);
@@ -237,6 +248,9 @@ layer(base);
 @layer base {
   body {
     font-family: "Inter", sans-serif;
+    background-color: var(--brand-bg-primary);
+    color: var(--brand-text-primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
@@ -262,4 +276,122 @@ layer(base);
 
 .pause-animation:hover {
   animation-play-state: paused;
+}
+
+/* ============================================
+   GLOBAL DARK MODE OVERRIDES
+   Catches all legacy components that use hardcoded
+   bg-white / bg-gray-* / text-gray-* classes
+   ============================================ */
+
+/* Backgrounds — light grays → warm soft surfaces */
+.dark .bg-white {
+  background-color: var(--brand-bg-primary) !important;
+}
+.dark .bg-gray-50,
+.dark .bg-gray-100 {
+  background-color: var(--brand-bg-secondary) !important;
+}
+.dark .bg-gray-200 {
+  background-color: var(--brand-bg-tertiary) !important;
+}
+
+/* Backgrounds — dark grays → warm espresso surfaces */
+.dark .bg-gray-900 {
+  background-color: #16130E !important;
+}
+.dark .bg-gray-800 {
+  background-color: #1E1A14 !important;
+}
+.dark .bg-gray-700 {
+  background-color: #26211A !important;
+}
+
+/* Gradient from/to overrides */
+.dark .from-gray-900,
+.dark .dark\:from-gray-900 {
+  --tw-gradient-from: #16130E !important;
+}
+.dark .to-gray-800,
+.dark .dark\:to-gray-800 {
+  --tw-gradient-to: #1E1A14 !important;
+}
+.dark .from-gray-800,
+.dark .dark\:from-gray-800 {
+  --tw-gradient-from: #1E1A14 !important;
+}
+.dark .to-gray-900,
+.dark .dark\:to-gray-900 {
+  --tw-gradient-to: #16130E !important;
+}
+
+/* Text colors */
+.dark .text-gray-900,
+.dark .text-gray-800 {
+  color: var(--brand-text-primary) !important;
+}
+.dark .text-gray-700,
+.dark .text-gray-600,
+.dark .text-gray-500 {
+  color: var(--brand-text-secondary) !important;
+}
+.dark .text-gray-400,
+.dark .text-gray-300 {
+  color: var(--brand-text-muted) !important;
+}
+.dark .text-black {
+  color: var(--brand-text-primary) !important;
+}
+
+/* Borders */
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: var(--brand-border) !important;
+}
+.dark .border-gray-400,
+.dark .border-gray-500 {
+  border-color: var(--brand-border-dark) !important;
+}
+
+/* Hover backgrounds */
+.dark .hover\:bg-gray-100:hover,
+.dark .hover\:bg-gray-50:hover {
+  background-color: var(--brand-bg-tertiary) !important;
+}
+
+/* Inputs & form elements */
+.dark input:not([class*="bg-"]),
+.dark textarea:not([class*="bg-"]),
+.dark select:not([class*="bg-"]) {
+  background-color: var(--brand-bg-secondary);
+  color: var(--brand-text-primary);
+  border-color: var(--brand-border);
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: var(--brand-text-muted);
+}
+
+/* Cards and sections: gradient light backgrounds */
+.dark .from-white,
+.dark .via-white,
+.dark .to-white {
+  --tw-gradient-from: var(--brand-bg-primary);
+  --tw-gradient-via: var(--brand-bg-primary);
+  --tw-gradient-to: var(--brand-bg-primary);
+}
+.dark .from-gray-50,
+.dark .via-gray-50,
+.dark .to-gray-50 {
+  --tw-gradient-from: var(--brand-bg-secondary);
+  --tw-gradient-via: var(--brand-bg-secondary);
+  --tw-gradient-to: var(--brand-bg-secondary);
+}
+
+/* Shadow adjustments for dark mode */
+.dark .shadow-md,
+.dark .shadow-lg,
+.dark .shadow-xl {
+  --tw-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--tw-shadow);
 }

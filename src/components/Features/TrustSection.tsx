@@ -44,7 +44,7 @@ const features = [
 
 export default function TrustSection() {
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-gray-50">
+    <section className="py-16 bg-theme-bg-soft">
       <div className="w-full px-6 lg:px-12">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -61,7 +61,7 @@ export default function TrustSection() {
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="group bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100"
+              className="group bg-theme-bg-card rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-theme-border"
             >
               <div className="flex items-start gap-4">
                 {/* Icon */}
@@ -84,7 +84,7 @@ export default function TrustSection() {
         </div>
 
         {/* Stats Section */}
-        <div className="mt-16 bg-gradient-to-r from-primary to-blue-600 rounded-2xl p-8 md:p-12">
+        <div className="mt-16 bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-8 md:p-12">
           <div className="grid md:grid-cols-4 gap-8 text-center text-white">
             <div>
               <div className="text-4xl md:text-5xl font-black mb-2">5000+</div>

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { productsAPI, Product } from '@/lib/api';
+import { Product } from '@/lib/api';
+import { useProducts } from '@/hooks/useProducts';
 import { Star, ChevronLeft, ChevronRight, ArrowRight, Loader2, Grid3X3, MessageCircle, Mail } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '+919529626262';
@@ -38,52 +39,20 @@ const CATEGORIES = [
 
 export default function ShopByCategory() {
   const [activeCategory, setActiveCategory] = useState(CATEGORIES[0].slug);
-  const [productsByCategory, setProductsByCategory] = useState<Record<string, Product[]>>({});
-  const [loadingCategories, setLoadingCategories] = useState<Record<string, boolean>>({});
-  const [initialLoading, setInitialLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Fetch products for a category
-  const fetchCategoryProducts = async (category: string) => {
-    if (productsByCategory[category]) return; // Already loaded
-    setLoadingCategories(prev => ({ ...prev, [category]: true }));
-    try {
-      const res = await productsAPI.getAll({ category, limit: 8 });
-      setProductsByCategory(prev => ({ ...prev, [category]: res.products }));
-    } catch (err) {
-      console.error(`Failed to fetch ${category} products:`, err);
-      setProductsByCategory(prev => ({ ...prev, [category]: [] }));
-    } finally {
-      setLoadingCategories(prev => ({ ...prev, [category]: false }));
-    }
-  };
+  // TanStack Query — auto-caches per category, no duplicate requests
+  const { data, isLoading } = useProducts({ category: activeCategory, limit: 8 });
+  const currentProducts = data?.products ?? [];
 
-  // Load the first category on mount
-  useEffect(() => {
-    const loadInitial = async () => {
-      await fetchCategoryProducts(CATEGORIES[0].slug);
-      setInitialLoading(false);
-    };
-    loadInitial();
+  const scroll = useCallback((direction: "left" | "right") => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft += direction === "left" ? -320 : 320;
+    }
   }, []);
 
-  // Load products when category tab changes
-  useEffect(() => {
-    fetchCategoryProducts(activeCategory);
-  }, [activeCategory]);
-
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = 320;
-      scrollRef.current.scrollLeft += direction === "left" ? -scrollAmount : scrollAmount;
-    }
-  };
-
-  const currentProducts = productsByCategory[activeCategory] || [];
-  const isLoading = initialLoading || loadingCategories[activeCategory];
-
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-800">
+    <section className="py-16 bg-theme-bg-soft">
       <div className="w-full px-6 lg:px-12">
         {/* Header */}
         <div className="text-center mb-10">
@@ -108,7 +77,7 @@ export default function ShopByCategory() {
               className={`flex-none flex items-center gap-2 px-5 py-3 rounded-full font-semibold text-sm transition-all whitespace-nowrap ${
                 activeCategory === cat.slug
                   ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                  : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 shadow-md'
+                  : 'bg-theme-bg text-theme-text-secondary hover:bg-theme-bg-card shadow-md'
               }`}
             >
               <span className="text-lg">{cat.icon}</span>
@@ -139,10 +108,10 @@ export default function ShopByCategory() {
               {currentProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="flex-none w-72 group bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                  className="flex-none w-72 group bg-theme-bg-card rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
                 >
                   {/* Image */}
-                  <Link href={`/products/${product.id}`} className="block relative h-64 bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                  <Link href={`/products/${product.id}`} className="block relative h-64 bg-theme-bg-soft overflow-hidden">
                     {product.image && (
                       <Image
                         src={product.image}
@@ -190,23 +159,16 @@ export default function ShopByCategory() {
                         href={getWhatsAppLink(product)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white text-sm font-semibold rounded-xl transition-colors"
+                        className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
                       >
                         <MessageCircle className="w-4 h-4" />
-                        WhatsApp
                       </a>
                       <a
                         href={getEmailLink(product)}
-                        className="flex items-center justify-center px-3 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
+                        className="flex items-center justify-center px-3 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-xl transition-colors"
                       >
                         <Mail className="w-4 h-4" />
                       </a>
-                      <Link
-                        href={`/products/${product.id}`}
-                        className="flex items-center justify-center px-3 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-xl transition-colors"
-                      >
-                        <ChevronRight className="w-4 h-4" />
-                      </Link>
                     </div>
                   </div>
                 </div>
@@ -218,24 +180,24 @@ export default function ShopByCategory() {
               <>
                 <button
                   onClick={() => scroll("left")}
-                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border border-gray-200 dark:border-gray-700"
+                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-3 bg-theme-bg rounded-full shadow-xl z-20 hover:bg-theme-bg-soft transition-all hover:scale-110 border border-theme-border"
                   aria-label="Scroll left"
                 >
-                  <ChevronLeft size={20} className="text-gray-800 dark:text-white" />
+                  <ChevronLeft size={20} className="text-theme-text" />
                 </button>
                 <button
                   onClick={() => scroll("right")}
-                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-xl z-20 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all hover:scale-110 border border-gray-200 dark:border-gray-700"
+                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-3 bg-theme-bg rounded-full shadow-xl z-20 hover:bg-theme-bg-soft transition-all hover:scale-110 border border-theme-border"
                   aria-label="Scroll right"
                 >
-                  <ChevronRight size={20} className="text-gray-800 dark:text-white" />
+                  <ChevronRight size={20} className="text-theme-text" />
                 </button>
               </>
             )}
 
             {/* Gradient overlays */}
-            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-800 pointer-events-none z-10"></div>
-            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-50 to-transparent dark:from-gray-800 pointer-events-none z-10"></div>
+            <div className="hidden md:block absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-theme-bg-soft to-transparent pointer-events-none z-10"></div>
+            <div className="hidden md:block absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-theme-bg-soft to-transparent pointer-events-none z-10"></div>
           </div>
         )}
 

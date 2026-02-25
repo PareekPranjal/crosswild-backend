@@ -58,14 +58,14 @@ const ProductList = () => {
     <div className="container mx-auto p-4">
       {/* Sort & Filter Section */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Products</h2>
+        <h2 className="text-2xl font-bold text-theme-text">Products</h2>
         <div className="flex items-center space-x-4">
-          <label htmlFor="sort" className="text-gray-700">Sort By:</label>
+          <label htmlFor="sort" className="text-theme-text-secondary">Sort By:</label>
           <select
             id="sort"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
-            className="border rounded-md py-1 px-2"
+            className="border border-theme-border bg-theme-bg text-theme-text rounded-md py-1 px-2"
           >
             <option value="default">Default</option>
             <option value="name-asc">Name (A-Z)</option>
