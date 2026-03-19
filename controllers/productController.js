@@ -8,6 +8,7 @@ exports.getAllProducts = async (req, res) => {
   try {
     const {
       category,
+      sub,
       bestSeller,
       newArrival,
       featured,
@@ -20,7 +21,20 @@ exports.getAllProducts = async (req, res) => {
 
     const query = { isActive: true };
 
-    if (category && category !== 'all') query.category = category;
+    if (category && category !== 'all') {
+      // Search in both legacy `category` field and new `productCategories` array
+      query.$or = [
+        { category },
+        { 'productCategories.category': category },
+      ];
+      // If subcategory filter is provided
+      if (sub) {
+        query.$or = [
+          { category, 'productCategories': { $elemMatch: { category, subcategories: sub } } },
+          { 'productCategories': { $elemMatch: { category, subcategories: sub } } },
+        ];
+      }
+    }
     if (bestSeller === 'true') query.bestSeller = true;
     if (newArrival === 'true') query.newArrival = true;
     if (featured === 'true') query.featured = true;
@@ -61,6 +75,15 @@ exports.getProduct = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Product not found' });
     }
 
+    // Debug: log what the DB has
+    console.log('── GET PRODUCT ──', product.name);
+    console.log('  sections:', JSON.stringify(product.sections));
+    console.log('  productCategories:', JSON.stringify(product.productCategories));
+    console.log('  colors:', JSON.stringify(product.colors));
+    console.log('  customFields:', JSON.stringify(product.customFields));
+    console.log('  sizes:', JSON.stringify(product.sizes));
+    console.log('  details:', JSON.stringify(product.details));
+
     res.json({ success: true, product });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -74,16 +97,27 @@ exports.createProduct = async (req, res) => {
   try {
     const productData = req.body;
 
+    // Debug: log what fields are received
+    console.log('── CREATE PRODUCT ── Received fields:', Object.keys(productData));
+    console.log('  sections:', JSON.stringify(productData.sections));
+    console.log('  productCategories:', JSON.stringify(productData.productCategories));
+    console.log('  colors:', JSON.stringify(productData.colors));
+    console.log('  customFields:', JSON.stringify(productData.customFields));
+    console.log('  sizes:', JSON.stringify(productData.sizes));
+
     // Remove empty productType to avoid ObjectId cast error
     if (!productData.productType) {
       delete productData.productType;
     }
 
-    // Upload image to ImgBB if base64 provided
+    // Upload image to Cloudinary if base64 provided
     if (productData.imageData) {
       try {
-        const imageUrl = await uploadToImgBB(productData.imageData, 'base64');
-        productData.image = imageUrl;
+        const category = productData.category || 'general';
+        const result = await uploadToImgBB(productData.imageData, 'base64', category);
+        productData.image = result.url;
+        productData.imageTrackingCode = result.trackingCode;
+        productData.imagePublicId = result.publicId;
         delete productData.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Image upload failed: ${error.message}` });
@@ -92,12 +126,20 @@ exports.createProduct = async (req, res) => {
 
     const product = await Product.create(productData);
 
+    // Debug: log what was saved
+    console.log('  SAVED product fields:', Object.keys(product.toObject()));
+    console.log('  SAVED sections:', JSON.stringify(product.sections));
+    console.log('  SAVED productCategories:', JSON.stringify(product.productCategories));
+    console.log('  SAVED colors:', JSON.stringify(product.colors));
+    console.log('  SAVED customFields:', JSON.stringify(product.customFields));
+
     res.status(201).json({
       success: true,
       message: 'Product created successfully',
       product,
     });
   } catch (error) {
+    console.error('CREATE PRODUCT ERROR:', error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 };
@@ -115,16 +157,26 @@ exports.updateProduct = async (req, res) => {
 
     const updateData = req.body;
 
+    // Debug: log what fields are being updated
+    console.log('── UPDATE PRODUCT ── Received fields:', Object.keys(updateData));
+    console.log('  sections:', JSON.stringify(updateData.sections));
+    console.log('  productCategories:', JSON.stringify(updateData.productCategories));
+    console.log('  colors:', JSON.stringify(updateData.colors));
+    console.log('  customFields:', JSON.stringify(updateData.customFields));
+
     // Remove empty productType to avoid ObjectId cast error
     if (!updateData.productType) {
       delete updateData.productType;
     }
 
-    // Upload new image if base64 provided
+    // Upload new image to Cloudinary if base64 provided
     if (updateData.imageData) {
       try {
-        const imageUrl = await uploadToImgBB(updateData.imageData, 'base64');
-        updateData.image = imageUrl;
+        const category = updateData.category || product.category || 'general';
+        const result = await uploadToImgBB(updateData.imageData, 'base64', category);
+        updateData.image = result.url;
+        updateData.imageTrackingCode = result.trackingCode;
+        updateData.imagePublicId = result.publicId;
         delete updateData.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Image upload failed: ${error.message}` });
@@ -137,12 +189,19 @@ exports.updateProduct = async (req, res) => {
       { new: true, runValidators: true }
     );
 
+    // Debug: log what was saved
+    console.log('  UPDATED product sections:', JSON.stringify(product.sections));
+    console.log('  UPDATED product productCategories:', JSON.stringify(product.productCategories));
+    console.log('  UPDATED product colors:', JSON.stringify(product.colors));
+    console.log('  UPDATED product customFields:', JSON.stringify(product.customFields));
+
     res.json({
       success: true,
       message: 'Product updated successfully',
       product,
     });
   } catch (error) {
+    console.error('UPDATE PRODUCT ERROR:', error.message);
     res.status(400).json({ success: false, message: error.message });
   }
 };

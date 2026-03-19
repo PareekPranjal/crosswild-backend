@@ -61,22 +61,25 @@ exports.createBlog = async (req, res) => {
   try {
     const blogData = req.body;
 
-    // Upload featured image to ImgBB if base64 provided
+    // Upload featured image to Cloudinary if base64 provided
     if (blogData.imageData) {
       try {
-        const imageUrl = await uploadToImgBB(blogData.imageData, 'base64');
-        blogData.image = imageUrl;
+        const result = await uploadToImgBB(blogData.imageData, 'base64', 'blogs');
+        blogData.image = result.url;
+        blogData.imageTrackingCode = result.trackingCode;
+        blogData.imagePublicId = result.publicId;
         delete blogData.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Image upload failed: ${error.message}` });
       }
     }
 
-    // Upload author image if base64 provided
+    // Upload author image to Cloudinary if base64 provided
     if (blogData.author && blogData.author.imageData) {
       try {
-        const authorImageUrl = await uploadToImgBB(blogData.author.imageData, 'base64');
-        blogData.author.image = authorImageUrl;
+        const result = await uploadToImgBB(blogData.author.imageData, 'base64', 'authors');
+        blogData.author.image = result.url;
+        blogData.author.imageTrackingCode = result.trackingCode;
         delete blogData.author.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Author image upload failed: ${error.message}` });
@@ -108,22 +111,25 @@ exports.updateBlog = async (req, res) => {
 
     const updateData = req.body;
 
-    // Upload new featured image if base64 provided
+    // Upload new featured image to Cloudinary if base64 provided
     if (updateData.imageData) {
       try {
-        const imageUrl = await uploadToImgBB(updateData.imageData, 'base64');
-        updateData.image = imageUrl;
+        const result = await uploadToImgBB(updateData.imageData, 'base64', 'blogs');
+        updateData.image = result.url;
+        updateData.imageTrackingCode = result.trackingCode;
+        updateData.imagePublicId = result.publicId;
         delete updateData.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Image upload failed: ${error.message}` });
       }
     }
 
-    // Upload new author image if base64 provided
+    // Upload new author image to Cloudinary if base64 provided
     if (updateData.author && updateData.author.imageData) {
       try {
-        const authorImageUrl = await uploadToImgBB(updateData.author.imageData, 'base64');
-        updateData.author.image = authorImageUrl;
+        const result = await uploadToImgBB(updateData.author.imageData, 'base64', 'authors');
+        updateData.author.image = result.url;
+        updateData.author.imageTrackingCode = result.trackingCode;
         delete updateData.author.imageData;
       } catch (error) {
         return res.status(400).json({ success: false, message: `Author image upload failed: ${error.message}` });

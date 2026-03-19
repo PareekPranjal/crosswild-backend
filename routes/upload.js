@@ -18,7 +18,7 @@ const upload = multer({
   },
 });
 
-// @desc    Upload image
+// @desc    Upload image (multipart file)
 // @route   POST /api/upload
 // @access  Private/Admin
 router.post('/', upload.single('image'), async (req, res) => {
@@ -27,17 +27,21 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).json({ success: false, message: 'No image file provided' });
     }
 
-    // Convert buffer to base64
+    // Convert buffer to base64 data URI
     const base64Image = req.file.buffer.toString('base64');
     const base64Data = `data:${req.file.mimetype};base64,${base64Image}`;
 
-    // Upload to ImgBB
-    const imageUrl = await uploadToImgBB(base64Data, 'base64');
+    // Use category/folder from request body, default to 'general'
+    const folder = req.body.folder || req.body.category || 'general';
+
+    const result = await uploadToImgBB(base64Data, 'base64', folder);
 
     res.json({
       success: true,
       message: 'Image uploaded successfully',
-      imageUrl,
+      imageUrl: result.url,
+      trackingCode: result.trackingCode,
+      publicId: result.publicId,
     });
   } catch (error) {
     console.error('Upload Error:', error);
@@ -50,19 +54,20 @@ router.post('/', upload.single('image'), async (req, res) => {
 // @access  Private/Admin
 router.post('/base64', async (req, res) => {
   try {
-    const { imageData } = req.body;
+    const { imageData, folder, category } = req.body;
 
     if (!imageData) {
       return res.status(400).json({ success: false, message: 'No image data provided' });
     }
 
-    // Upload to ImgBB
-    const imageUrl = await uploadToImgBB(imageData, 'base64');
+    const result = await uploadToImgBB(imageData, 'base64', folder || category || 'general');
 
     res.json({
       success: true,
       message: 'Image uploaded successfully',
-      imageUrl,
+      imageUrl: result.url,
+      trackingCode: result.trackingCode,
+      publicId: result.publicId,
     });
   } catch (error) {
     console.error('Upload Error:', error);

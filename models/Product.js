@@ -15,6 +15,20 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Product description is required'],
   },
+  tagline: {
+    type: String,
+    trim: true,
+    default: '',
+  },
+  shortDescription: {
+    type: String,
+    default: '',
+  },
+  // CMS-driven content sections (admin adds/removes dynamically)
+  sections: [{
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+  }],
   price: {
     type: Number,
     default: 0,
@@ -32,8 +46,13 @@ const productSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: [true, 'Product category is required'],
+    default: '',
   },
+  // Multi-category + subcategory selection (matches navbar structure)
+  productCategories: [{
+    category: { type: String, required: true },       // slug e.g. 'tshirts'
+    subcategories: [{ type: String }],                // slugs e.g. ['dry-fit','cotton']
+  }],
   // Reference to ProductType for dynamic type info
   productType: {
     type: mongoose.Schema.Types.ObjectId,
@@ -43,8 +62,17 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Product image is required'],
   },
-  subImages: [{
+  imageTrackingCode: {
     type: String,
+    index: true,
+  },
+  imagePublicId: {
+    type: String,
+  },
+  subImages: [{
+    url: { type: String },
+    trackingCode: { type: String },
+    publicId: { type: String },
   }],
   sizes: [{
     type: String,
@@ -58,6 +86,11 @@ const productSchema = new mongoose.Schema({
     of: mongoose.Schema.Types.Mixed,
     default: {},
   },
+  // Admin-defined custom fields (label + value pairs)
+  customFields: [{
+    label: { type: String, required: true },
+    value: { type: String, required: true },
+  }],
   bestSeller: {
     type: Boolean,
     default: false,
@@ -116,8 +149,17 @@ const productSchema = new mongoose.Schema({
   timestamps: true,
 });
 
+// Auto-populate category from first productCategories entry
+productSchema.pre('save', function (next) {
+  if (this.productCategories && this.productCategories.length > 0 && !this.category) {
+    this.category = this.productCategories[0].category;
+  }
+  next();
+});
+
 // Index for better search performance
 productSchema.index({ name: 'text', description: 'text' });
 productSchema.index({ category: 1, bestSeller: 1, newArrival: 1, featured: 1 });
+productSchema.index({ 'productCategories.category': 1 });
 
 module.exports = mongoose.model('Product', productSchema);

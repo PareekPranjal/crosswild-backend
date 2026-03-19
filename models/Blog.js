@@ -14,6 +14,13 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Blog image is required'],
   },
+  imageTrackingCode: {
+    type: String,
+    index: true,
+  },
+  imagePublicId: {
+    type: String,
+  },
   author: {
     name: {
       type: String,
@@ -22,6 +29,9 @@ const blogSchema = new mongoose.Schema({
     image: {
       type: String,
       default: '/images/blog/author-default.png',
+    },
+    imageTrackingCode: {
+      type: String,
     },
     designation: {
       type: String,
